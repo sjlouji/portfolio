@@ -9,6 +9,11 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+package-lock.json
+yarn.lock
+.yarn/cache
+.yarn/install-state.gz
+.yarn/unplugged
 
 # testing
 /coverage
@@ -37,7 +42,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.genkit/*
 .env*
 
 # firebase
