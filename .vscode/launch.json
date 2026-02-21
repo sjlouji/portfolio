@@ -30,7 +30,9 @@
       "type": "node",
       "request": "attach",
       "port": 9229,
-      "skipFiles": ["<node_internals>/**"],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
       "cwd": "${workspaceFolder}"
     }
   ]

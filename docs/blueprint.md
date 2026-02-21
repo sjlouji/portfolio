@@ -3,7 +3,7 @@
 ## Core Features:
 
 - Dynamic Content Sections: Elegant display of work history, skills, and project portfolio.
-- Adaptive Profile Presentation: AI-powered tool that customizes displayed experience based on viewer. The AI reasons about when and whether it's appropriate to highlight certain details to tailor the website to the context of each individual.
+- Adaptive Profile Presentation: Optional personalization of displayed experience based on viewer context.
 - Interactive Animations: Smooth, captivating animations for page transitions and element reveals.
 - Cross-Platform Compatibility: Responsive design to ensure seamless viewing on all devices.
 - Contact and Sharing: Easy integration with contact forms and social media platforms.

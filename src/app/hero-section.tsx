@@ -27,7 +27,13 @@ export function HeroSection({ content }: { content: HeroSectionProps }) {
     <section className="w-full min-h-[70vh] flex items-center py-24 sm:py-32 lg:py-48">
       <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-4xl">
-          <h1 className="text-6xl sm:text-7xl md:text-9xl font-medium leading-tight tracking-tight text-left flex flex-wrap gap-3">
+          <p
+            className="font-body font-medium mb-5 leading-tight tracking-tight"
+            style={{ fontSize: "20px", color: "rgb(8, 98, 8)" }}
+          >
+            Hello, my name is
+          </p>
+          <h1 className="font-body text-6xl sm:text-7xl md:text-9xl font-medium leading-tight tracking-tight text-left flex flex-wrap gap-3">
             {splittedText.map((word: string, i: number) => (
               <span key={i} className="-hidden block">
                 <motion.span
@@ -44,7 +50,7 @@ export function HeroSection({ content }: { content: HeroSectionProps }) {
               </span>
             ))}
           </h1>
-          <p className="mt-8 text-lg md:text-2xl text-left max-w-2xl">
+          <p className="font-body mt-8 text-lg md:text-2xl text-left max-w-2xl">
             {subTitle}
           </p>
         </div>

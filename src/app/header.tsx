@@ -22,9 +22,9 @@ export function Header({ content }: { content: HeaderSectionProps }) {
           <MotionImage
             src={logo}
             alt={name}
-            width={52}
-            height={52}
-            className="w-15 h-15"
+            width={32}
+            height={32}
+            className="h-8 w-8 shrink-0"
           />
         </Link>
         <nav className="hidden md:flex space-x-10 text-lg font-medium ml-auto">

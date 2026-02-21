@@ -10,10 +10,10 @@ import type { ResumeData } from "@/types/resume";
 
 export const portfolioData = {
   name: "Joan Louji",
-  title: "Velocity-First Engineer",
+  title: "Joan Louji.",
   subTitle:
-    "Hey, I'm Joan Louji, an Software Engineer logistics problems into product since 2020.",
-  logo: "/images/logo.png",
+    "Hey, I’m a backend engineer building scalable systems where precision, traceability, and reliability matter. I focus on clean design, data integrity, and production-grade workflows that hold up at scale.",
+  logo: "/images/logo.svg",
   sections: [
     { name: "About", href: "#about" },
     { name: "Works", href: "#works" },
