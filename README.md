@@ -1,5 +1,9 @@
-# Firebase Studio
+# Portfolio
 
-This is a NextJS starter in Firebase Studio.
+Next.js portfolio app.
 
-To get started, take a look at src/index.tsx.
+- **Dev:** `pnpm dev` (port 9002)
+- **Build:** `pnpm build`
+- **Start:** `pnpm start`
+
+Entry: `src/app/page.tsx` → `LandingPage`.

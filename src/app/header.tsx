@@ -25,8 +25,6 @@ export function Header({ content }: { content: HeaderSectionProps }) {
             width={52}
             height={52}
             className="w-15 h-15"
-            whileTap={{ scale: 0.85, rotate: 10 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
           />
         </Link>
         <nav className="hidden md:flex space-x-10 text-lg font-medium ml-auto">
