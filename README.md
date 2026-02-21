@@ -6,6 +6,8 @@ Built with Next.js, React, TypeScript, Tailwind CSS, and Framer Motion.
 
 **Found a bug or want to suggest something?** When you open a new issue on GitHub, use the [issue template](.github/ISSUE_TEMPLATE/issue.md).
 
+**Want to contribute?** See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 **License:** [MIT](LICENSE)
 
 ---
