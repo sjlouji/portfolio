@@ -67,9 +67,53 @@ Before submitting a pull request, please:
    Use your editor’s formatter (e.g. Prettier) or run your project’s format script if you have one.
 
 4. **Commit**  
-   Use clear, descriptive commit messages.
+   Use clear, descriptive commit messages (see format below).
 
 5. **Submit the PR**  
-   Push to your fork and open a pull request against the `main` branch of the original repository.
+   Push to your fork and open a pull request against the `main` branch of the original repository. Use a clear PR title (see format below). Fill in the [pull request template](.github/PULL_REQUEST_TEMPLATE.md) that appears when you create the PR.
+
+6. **Add labels**  
+   Add one or more labels to your PR (e.g. `enhancement`, `bug`, `documentation`) so maintainers can triage and filter easily.
+
+## Using labels (issues and pull requests)
+
+Please add labels to **issues** and **pull requests** when you open them. Labels help with triage and finding related work.
+
+**Suggested labels:**
+
+- **bug** — Something isn’t working or is incorrect.
+- **enhancement** — New feature or improvement.
+- **documentation** — Docs, README, CONTRIBUTING, comments.
+- **good first issue** — Good for new contributors (maintainers can add this to issues).
+- **help wanted** — Extra attention wanted (maintainers can add this).
+
+If the repo has custom labels, use those. Add labels from the right-hand sidebar when creating or editing an issue or PR.
+
+## Commit message and PR title format
+
+Use this style so history and PRs are easy to scan.
+
+**Format:** `type(scope): short description`
+
+- **type:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+- **scope:** optional area (e.g. `experience`, `about`, `data`, `readme`)
+- **description:** imperative, lowercase after the colon, no period at the end
+
+**Commit examples:**
+
+```
+feat(experience): add expandable role details
+fix(contact): reduce bottom spacing
+docs(readme): add contribution link
+refactor(sections): move experience types to src/types
+```
+
+**PR title examples:**
+
+- `feat(experience): add expandable role details`
+- `fix: correct browser title on section change`
+- `docs: add CONTRIBUTING and issue template`
+
+Use the same style for the PR title as for your final commit (or a single summary commit) in the PR.
 
 Thanks for contributing!

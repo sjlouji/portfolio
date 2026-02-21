@@ -23,3 +23,7 @@ assignees: ''
 - OS:
 - Browser (if UI):
 - Node / pnpm versions (if relevant):
+
+---
+
+**Please add one or more labels** to this issue (e.g. `bug`, `enhancement`, `documentation`) using the sidebar so we can triage it easily.
