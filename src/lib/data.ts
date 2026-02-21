@@ -10,12 +10,13 @@ import type { ResumeData } from "@/types/resume";
 
 export const portfolioData = {
   name: "Joan Louji",
-  title: "Joan Louji.",
+  title: "I build for the backend.",
   subTitle:
     "Hey, I’m a backend engineer building scalable systems where precision, traceability, and reliability matter. I focus on clean design, data integrity, and production-grade workflows that hold up at scale.",
   logo: "/images/logo.svg",
   sections: [
     { name: "About", href: "#about" },
+    { name: "Experience", href: "#experience" },
     { name: "Works", href: "#works" },
     { name: "Posts", href: "#posts" },
     { name: "Contact", href: "#contact" },
@@ -77,6 +78,81 @@ export const portfolioData = {
       { name: "LLMs", logo: "" },
     ],
   },
+  experience: [
+    {
+      period: "Jan 2026 — Present",
+      role: "Software Engineer 2",
+      company: "Freehand",
+      companyUrl: "https://www.linkedin.com/company/freehand",
+      organization: "Quaking Aspen Pvt Ltd",
+      description:
+        "Part of the Autonomous Supply Chain product development team. Building and enhancing software products that solve complex supply chain problems and make a real impact.",
+      tags: ["TypeScript", "JavaScript", "Node.js", "React", "Vue.js"],
+    },
+    {
+      period: "Feb 2025 — Jan 2026",
+      role: "Software Engineer 2",
+      company: "Pando",
+      companyUrl: "https://www.pando.ai",
+      organization: "Quaking Aspen Pvt Ltd",
+      description:
+        "Continued ownership of critical modules and mentoring. Drove technical decisions and collaborated with cross-functional teams on the Cost Engine and Rate Management systems.",
+      tags: ["Vue 3", "Microservices", "AWS", "Node.js", "TypeScript"],
+    },
+    {
+      period: "May 2023 — Feb 2025",
+      role: "Software Engineer 1",
+      company: "Pando",
+      companyUrl: "https://www.pando.ai",
+      organization: "Quaking Aspen Pvt Ltd",
+      description:
+        "After my promotion to SDE 1 at Pando, I took on more advanced responsibilities that helped me grow further as a developer.",
+      highlights: [
+        "Migrated to Microservice Architecture: Transformed the Cost Engine and Rate Management monolithic product into a microservice architecture.",
+        "Migrated to Vue 3: Successfully migrated the Costing Engine and Rate management frontend from Vue 2 to Vue 3, improving performance and leveraging new features.",
+        "Developed Authentication Services: Created authentication services for both external microservices and internal services within the microservices framework.",
+        "Data Encryption: Implemented data encryption to secure incoming data, enhancing the overall security of Pando's systems.",
+        "Vue 3 Component Library: Established a new repository for a Vue 3 component library and integrated it with Storybook for better documentation and development.",
+        "Handled High-Volume Requests: Worked on Costing Engine which costs shipment data based on contracts. Managed to handle billions of requests efficiently.",
+        "Data Pipelines and Lambdas: Created and optimized data pipelines and AWS Lambda functions to handle billions of requests.",
+        "Code Reviews and Hiring: Regular code reviews and participated in the hiring process by conducting initial and second-round technical interviews.",
+      ],
+      tags: ["Vue 3", "Microservices", "Node.js", "AWS Lambda", "Storybook", "GraphQL"],
+    },
+    {
+      period: "Feb 2021 — May 2023",
+      role: "Associate Software Engineer",
+      company: "Pando",
+      companyUrl: "https://www.pando.ai",
+      organization: "Quaking Aspen Pvt Ltd",
+      description:
+        "After my SDE Internship at Pando, I took on various responsibilities, working on different modules and projects.",
+      highlights: [
+        "Worked on TMS module: Integrated TMS with external software, including packing solutions, warehouse management software, dangerous goods solutions, and document service.",
+        "Developed warehouse management software: Created the entire API Service using Node.js and Express JS, and integrated it with the client's Informatica service.",
+        "Worked on procurement software: Implemented WebSockets and polling techniques for live data transfer between the backend and frontend.",
+        "Developed last-mile optimization solutions: Worked on optimization algorithms and APIs to optimize and visualize orders.",
+        "Bootstrapped the first Flutter application at Pando: Migrated a native Android app to Flutter. Participated in recruitment, conducting initial interviews for Flutter developers.",
+      ],
+      tags: ["Node.js", "Express", "Vue.js", "Flutter", "WebSockets"],
+    },
+    {
+      period: "Dec 2020 — Feb 2021",
+      role: "Software Development Intern",
+      company: "Pando",
+      companyUrl: "https://www.pando.ai",
+      organization: "Quaking Aspen Pvt Ltd",
+      description:
+        "Developed a new service that acted as an intermediary between third-party carriers and Pando for shipment bookings, edits, cancellations, and tracking.",
+      highlights: [
+        "Developed a new intermediary service: Enabled shipment bookings, edits, cancellations, and tracking between 4 third-party US-based carriers and Pando.",
+        "Studied and integrated documentation from four major US carriers to ensure seamless integration with Pando's TMS software.",
+        "Worked extensively with Node.js, Vue.js, MongoDB, worker threads, Docker, AWS EC2, and S3.",
+        "Architected applications and participated in client meetings to help triage and resolve issues.",
+      ],
+      tags: ["Node.js", "Vue.js", "MongoDB", "Docker", "AWS"],
+    },
+  ],
   works: [
     {
       date: "June 2025",

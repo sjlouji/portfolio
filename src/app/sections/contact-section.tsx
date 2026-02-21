@@ -2,7 +2,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-import { SectionWrapper } from "@/app/section-wrapper";
+import { SectionWrapper } from "@/app/components/section-wrapper";
 import type { ContactSectionProps } from "@/types/contact";
 
 function InfoBlock({
@@ -26,8 +26,8 @@ function InfoBlock({
 
 export function ContactSection({ contact }: ContactSectionProps) {
   return (
-    <SectionWrapper id="contact" className="!bg-white !py-0">
-      <div className="max-w-7xl mx-auto px-6 pt-24 pb-0 grid grid-cols-1 lg:grid-cols-2 gap-16 text-gray-900">
+    <SectionWrapper id="contact" className="!bg-white">
+      <div className="max-w-7xl mx-auto px-6 pt-24 pb-16 grid grid-cols-1 lg:grid-cols-2 gap-16 text-gray-900">
         <div className="flex flex-col justify-center">
           <h2 className="text-4xl md:text-6xl font-bold leading-tight mb-8 uppercase">
             {contact.heading.split("\n").map((line: string, i: number) => (
@@ -81,7 +81,7 @@ export function ContactSection({ contact }: ContactSectionProps) {
                       style={{ display: "inline-block" }}
                     />
                   </motion.a>
-                )
+                ),
               )}
             </div>
           </InfoBlock>

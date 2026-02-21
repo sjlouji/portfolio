@@ -4,16 +4,16 @@ import { motion } from "framer-motion";
 
 import type { LandingPageProps } from "@/types/landing";
 import { sectionIds } from "@/lib/data";
-import { fetchMediumPosts } from "@/lib/fetchMedium";
 
-import { Header } from "@/app/header";
-import { HeroSection } from "@/app/hero-section";
-import { AboutSection } from "@/app/about-section";
-import { ProjectsSection } from "@/app/projects-section";
-import { ContactSection } from "@/app/contact-section";
-import { Footer } from "@/app/footer";
-import { PostSection } from "@/app/post-section";
-import { ResumeSection } from "@/app/resume-section";
+import { Header } from "@/app/components/header";
+import { Footer } from "@/app/components/footer";
+import { HeroSection } from "@/app/sections/hero-section";
+import { AboutSection } from "@/app/sections/about-section";
+import { ExperienceSection } from "@/app/sections/experience-section";
+import { ProjectsSection } from "@/app/sections/projects-section";
+import { ContactSection } from "@/app/sections/contact-section";
+import { PostSection } from "@/app/sections/post-section";
+import { ResumeSection } from "@/app/sections/resume-section";
 
 export function LandingPage({
   initialData,
@@ -51,7 +51,7 @@ export function LandingPage({
         "",
         section === "hero"
           ? window.location.pathname + window.location.search
-          : `#${section}`
+          : `#${section}`,
       );
       lastSection.current = section;
     }
@@ -60,6 +60,7 @@ export function LandingPage({
   const sectionComponents: Record<string, React.ReactNode> = {
     hero: <HeroSection content={initialData} />,
     about: <AboutSection about={initialData.about} />,
+    experience: <ExperienceSection experiences={initialData.experience} />,
     works: <ProjectsSection projects={initialData.works} />,
     posts: <PostSection blogs={blogs} />,
     contact: <ContactSection contact={initialData.contact} />,
@@ -78,7 +79,7 @@ export function LandingPage({
               : { opacity: 0.3, y: 60 }
           }
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="min-h-screen flex items-center justify-center pt-20"
+          className={id === "contact" ? "flex justify-center w-full" : "min-h-screen flex justify-center w-full"}
         >
           {sectionComponents[id]}
         </motion.div>

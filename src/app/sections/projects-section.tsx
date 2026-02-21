@@ -2,9 +2,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 import { Pagination } from "@/components/pagination";
-import { SectionWrapper } from "@/app/section-wrapper";
+import { SectionWrapper } from "@/app/components/section-wrapper";
 import type { Project, ProjectsSectionProps } from "@/types/project";
-import { initialData, PAGE_SIZE } from "@/lib/data";
+import { PAGE_SIZE } from "@/lib/data";
 
 export function ProjectsSection({ projects }: ProjectsSectionProps) {
   const [page, setPage] = useState(1);
@@ -31,12 +31,12 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-2xl md:text-2xl font-mono font-medium text-gray-900 hover:underline focus:underline transition group"
+                    className="inline-flex items-center text-xl md:text-xl font-mono font-medium text-gray-900 hover:underline focus:underline transition group"
                     whileHover={{ x: 8 }}
                   >
                     {project.title}
                   </motion.a>
-                  <div className="font-sans text-base md:text-lg text-gray-600 mb-2 mt-2">
+                  <div className="font-sans text-[17px] text-gray-600 mb-2 mt-2">
                     {project.description}
                   </div>
                   <div className="flex flex-wrap items-center gap-2 mt-2">
