@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Pagination } from "@/components/pagination";
-import { SectionWrapper } from "@/app/section-wrapper";
+import { SectionWrapper } from "@/app/components/section-wrapper";
 
 const PAGE_SIZE = 4;
 
@@ -37,12 +37,12 @@ export function PostSection({ blogs }: { blogs: BlogPost[] }) {
                   href={post.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center text-2xl md:text-2xl font-mono font-medium text-gray-900 hover:underline focus:underline transition group"
+                  className="inline-flex items-center text-lg md:text-xl font-mono font-medium text-gray-900 hover:underline focus:underline transition group"
                   whileHover={{ x: 8 }}
                 >
                   {post.title}
                 </motion.a>
-                <div className="font-sans text-base md:text-lg text-gray-600 mb-2 mt-2">
+                <div className="font-sans text-[17px] text-gray-600 mb-2 mt-2">
                   {post.summary.length > 150
                     ? `${post.summary.substring(0, 150)}...`
                     : post.summary}

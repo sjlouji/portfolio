@@ -5,8 +5,6 @@ import {
   Phone,
   Linkedin,
   Calendar,
-  LucideIcon,
-  Download,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import type { ResumeData } from "@/types/resume";
@@ -131,7 +129,6 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
       </motion.header>
 
       <div className="grid grid-cols-12 gap-x-8 mt-4">
-        {/* Left Column */}
         <div className="col-span-8 space-y-4">
           <motion.section
             variants={sectionVariants}
@@ -209,7 +206,6 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
           </motion.section>
         </div>
 
-        {/* Right Column */}
         <div className="col-span-4 space-y-4">
           <motion.section
             variants={sectionVariants}
@@ -309,19 +305,16 @@ export function ResumeSection() {
     html, body {
       -webkit-print-color-adjust: exact;
     }
-    /* Disable all animations and transitions */
     *, *::before, *::after {
       animation: none !important;
       transition: none !important;
     }
-    /* Override framer-motion's inline styles for printing */
     [style*="opacity: 0"] {
       opacity: 1 !important;
     }
     [style*="transform:"] {
       transform: none !important;
     }
-    /* Ensure on-screen container constraints are removed */
     .A4-size {
       width: 100% !important;
       max-width: none !important;

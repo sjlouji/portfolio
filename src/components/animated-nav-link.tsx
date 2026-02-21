@@ -9,13 +9,12 @@ interface AnimatedNavLinkProps {
 
 export function AnimatedNavLink({ href, children }: AnimatedNavLinkProps) {
   return (
-    <Link href={href} passHref prefetch={false}>
-      <motion.a
+    <Link href={href} prefetch={false} className="transition-colors hover:text-primary">
+      <motion.span
+        style={{ display: "inline-block" }}
         whileHover={{ scale: 1.08, color: "#000", opacity: 0.85 }}
         whileTap={{ scale: 0.95, color: "#222" }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="transition-colors hover:text-primary"
-        style={{ display: "inline-block" }}
         onClick={(e) => {
           e.preventDefault();
           const el = document.querySelector(href);
@@ -26,7 +25,7 @@ export function AnimatedNavLink({ href, children }: AnimatedNavLinkProps) {
         }}
       >
         {children}
-      </motion.a>
+      </motion.span>
     </Link>
   );
 }

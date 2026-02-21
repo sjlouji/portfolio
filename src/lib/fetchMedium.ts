@@ -11,7 +11,7 @@ export async function fetchMediumPosts(username: string, limit = 20) {
         image = item.enclosure.url;
       } else if (item?.["content:encoded"]) {
         const imgMatch = item?.["content:encoded"].match(
-          /<img[^>]+src="([^"]+)"/
+          /<img[^>]+src="([^"]+)"/,
         );
         if (imgMatch) {
           image = imgMatch[1];
@@ -35,7 +35,6 @@ export async function fetchMediumPosts(username: string, limit = 20) {
     });
   } catch (error) {
     console.warn("Failed to fetch Medium posts:", error);
-    // Return fallback data to prevent build failure
     return [
       {
         title: "Sample Blog Post",

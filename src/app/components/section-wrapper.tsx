@@ -11,7 +11,7 @@ export function SectionWrapper({
 }: SectionWrapperProps) {
   return (
     <section id={id} className={cn("w-full py-20 lg:py-20", className)}>
-      <div className="container mx-auto px-4 md:px-3">
+      <div className="container mx-auto px-4 md:px-6">
         <AnimatedSection>
           {title && (
             <h2 className="font-headline text-4xl md:text-5xl font-medium mb-12">
