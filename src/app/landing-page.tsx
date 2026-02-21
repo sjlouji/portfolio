@@ -13,7 +13,6 @@ import { ExperienceSection } from "@/app/sections/experience-section";
 import { ProjectsSection } from "@/app/sections/projects-section";
 import { ContactSection } from "@/app/sections/contact-section";
 import { PostSection } from "@/app/sections/post-section";
-import { ResumeSection } from "@/app/sections/resume-section";
 
 export function LandingPage({
   initialData,
@@ -43,6 +42,18 @@ export function LandingPage({
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const sectionTitles: Record<string, string> = {
+      hero: "Home",
+      ...Object.fromEntries(
+        initialData.sections.map((s) => [s.href.replace("#", ""), s.name]),
+      ),
+    };
+    const sectionName = sectionTitles[activeSection] ?? activeSection;
+    const siteName = initialData?.name ?? "Joan Louji";
+    document.title = `${siteName} | ${sectionName}`;
+  }, [activeSection, initialData]);
 
   const setActionSessionToUrl = (section: string) => {
     if (section && section !== lastSection.current) {
@@ -79,7 +90,11 @@ export function LandingPage({
               : { opacity: 0.3, y: 60 }
           }
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className={id === "contact" ? "flex justify-center w-full" : "min-h-screen flex justify-center w-full"}
+          className={
+            id === "contact"
+              ? "flex justify-center w-full"
+              : "min-h-screen flex justify-center w-full"
+          }
         >
           {sectionComponents[id]}
         </motion.div>
