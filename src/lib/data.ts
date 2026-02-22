@@ -10,9 +10,9 @@ import type { ResumeData } from "@/types/resume";
 
 export const portfolioData = {
   name: "Joan Louji",
-  title: "I build for the backend.",
+  title: "I build systems that think, scale, and evolve.",
   subTitle:
-    "Hey, I’m a backend engineer building scalable systems where precision, traceability, and reliability matter. I focus on clean design, data integrity, and production-grade workflows that hold up at scale.",
+    "I engineer intelligent, end to end systems built for scale and real-world complexity. I focus on clean architecture, reliable data foundations, and AI that works in production.",
   logo: "/images/logo.svg",
   sections: [
     { name: "About", href: "#about" },
@@ -24,9 +24,12 @@ export const portfolioData = {
   about: {
     name: "Joan Louji",
     description: [
-      "Engineer by profession, Working at Pando who is passionate about developing new software products and writing efficient algorithms. I enjoy being part of a major Autonomous Supply chain product development team, solving complex supply chain problems, enhancing products, and contributing to solutions that make a real impact.",
-      "I graduated from Loyola ICAM College of Engineering and Technology (LICET), Chennai, in 2020 with a B.Tech degree. During my time in college, I delved into Native Android and iOS development, freelanced on various projects, and contributed to open-source communities.",
-      "Apart from my technical pursuits, I have a creative side too. I love playing the keyboard, and I used to play football and tennis regularly during my college days.",
+      "I’m a software engineer who enjoys solving real-world problems through thoughtful system design. Over the years, I’ve primarily worked in logistics and supply chain products, building systems that manage complex workflows, pricing logic, auditing, and large-scale data processing pipelines.",
+      "At Quaking Aspen (Freehand), I focus on designing and building production-grade systems across the stack. My current work involves architecting scalable “agent-based” systems that can operate independently, whether for auditing, routing, costing, or other evolving business logic. I enjoy thinking through architectural decisions and building systems that are not just functional, but reliable and adaptable as requirements change.",
+      "Before this, I spent over five years at Quaking Aspen (Pando), where I grew from an intern to Software Engineer 2. During that time, I helped migrate core products to a microservices architecture, built authentication and encryption systems to improve security, and optimized workflows that handled billions of requests. I also contributed across frontend, mobile, and cloud infrastructure. Pando taught me how real production systems behave and how to build them properly so they scale and remain calm under pressure.",
+      "I enjoy working across the stack (backend APIs, frontend interfaces, mobile applications, and cloud infrastructure (AWS)). Recently, I’ve been exploring AI and LLM-based systems, with a vision of building scalable AI “teams” that can independently handle tasks like reconciliation, auditing, and costing, almost like intelligent digital assistants that can be depended upon.",
+      "I graduated from Loyola ICAM College of Engineering and Technology (LICET) in 2020 with a degree in Information Technology. During college, I began my technical career with Android and iOS development, worked on freelance projects, and contributed to open-source communities.",
+      "Outside of engineering, I enjoy writing about technology, playing musical instruments, and playing football and tennis. I love to learn continuously and explore new solutions to problems I face in real-world.",
     ],
     links: [
       {
@@ -57,8 +60,11 @@ export const portfolioData = {
       { name: "JavaScript", logo: "/images/js.png" },
       { name: "TypeScript", logo: "/images/typescript.png" },
       { name: "React", logo: "/images/react.png" },
-      { name: "Next.js", logo: "/images/icons8-next.js-480.png" },
       { name: "Node.js", logo: "/images/node-js.png" },
+      { name: "Embedding Models", logo: "" },
+      { name: "Generative AI", logo: "" },
+      { name: "LLM-based Systems", logo: "" },
+      { name: "AI Agents", logo: "" },
       { name: "Java", logo: "/images/java.png" },
       { name: "Python", logo: "/images/python.png" },
       { name: "Flutter", logo: "/images/icons8-flutter-480.png" },
@@ -74,8 +80,6 @@ export const portfolioData = {
       { name: "LangChain", logo: "/images/langchain.png" },
       { name: "AWS", logo: "/images/icons8-aws-logo-480.png" },
       { name: "Blogging", logo: "/images/medium.png" },
-      { name: "Audio Engineering", logo: "" },
-      { name: "LLMs", logo: "" },
     ],
   },
   experience: [
@@ -117,7 +121,14 @@ export const portfolioData = {
         "Data Pipelines and Lambdas: Created and optimized data pipelines and AWS Lambda functions to handle billions of requests.",
         "Code Reviews and Hiring: Regular code reviews and participated in the hiring process by conducting initial and second-round technical interviews.",
       ],
-      tags: ["Vue 3", "Microservices", "Node.js", "AWS Lambda", "Storybook", "GraphQL"],
+      tags: [
+        "Vue 3",
+        "Microservices",
+        "Node.js",
+        "AWS Lambda",
+        "Storybook",
+        "GraphQL",
+      ],
     },
     {
       period: "Feb 2021 — May 2023",
@@ -385,11 +396,6 @@ export const portfolioData = {
         name: "LinkedIn",
         url: "https://linkedin.com/in/sjlouji",
         logo: "/images/LI-In-Bug.png",
-      },
-      {
-        name: "Twitter",
-        url: "https://x.com/JoanLouji",
-        logo: "/images/icons8-x-500.png",
       },
     ],
   },
