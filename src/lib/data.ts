@@ -227,6 +227,21 @@ export const portfolioData = {
       "data-ai-hint": "portfolio website",
     },
     {
+      date: "May 2025",
+      title: "Last-Mile Delivery Assignment Engine",
+      description:
+        "A TypeScript engine that optimally assigns delivery orders to riders in real time. It balances SLA compliance, travel distance, workload fairness, and route stability while respecting constraints like vehicle capacity, time windows, and geography.  Built to handle high-volume operations, it supports intelligent batching, surge adaptation, re-assignment logic, and flexible configuration for different delivery models — from food and e-commerce to critical shipments.",
+      tags: [
+        "TypeScript",
+        "Last-Mile Delivery",
+        "Real-time Assignment",
+        "Delivery Optimization",
+        "Node",
+      ],
+      link: "https://github.com/sjlouji/project-allot",
+      "data-ai-hint": "last-mile delivery assignment engine",
+    },
+    {
       date: "August 2024",
       title: "GL Code Matching Algorithms",
       description:
