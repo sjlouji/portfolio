@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
+import { ExternalLink, ChevronDown, ChevronUp, Github } from "lucide-react";
 
 import { SectionWrapper } from "@/app/components/section-wrapper";
 import type {
@@ -22,26 +23,43 @@ function ExperienceRow({
   const hasDetail = exp.highlights?.length;
   return (
     <div className="flex flex-col transition-colors py-6">
-      <div className="flex items-start">
-        <div className="w-30 flex-shrink-0 text-xs uppercase text-gray-400 pt-1">
-          {exp.period}
+      <div className="flex items-start gap-6">
+        <div className="w-28 flex-shrink-0">
+          <span className="text-xs uppercase tracking-wider text-gray-400">
+            {exp.period}
+          </span>
         </div>
-        <div className="flex-1 ml-10">
-          <motion.a
-            href={exp.companyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center text-xl md:text-xl font-mono font-medium text-gray-900 hover:underline focus:underline transition group"
-            whileHover={{ x: 8 }}
-          >
-            {exp.role}
-            <span className="text-gray-500 font-normal">
-              {" · "}
-              {exp.company}
-              {exp.organization ? ` · ${exp.organization}` : ""}
-            </span>
-            <ExternalLink className="ml-1 h-3.5 w-3.5 opacity-70" />
-          </motion.a>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-3">
+            <motion.a
+              href={exp.companyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xl font-mono font-medium text-gray-900 hover:underline focus:underline transition-colors"
+              whileHover={{ opacity: 0.85 }}
+            >
+              {exp.role}
+              <span className="text-gray-500 font-normal">
+                {" · "}
+                {exp.company}
+                {exp.organization ? ` · ${exp.organization}` : ""}
+              </span>
+              <ExternalLink className="h-4 w-4 shrink-0 opacity-70" />
+            </motion.a>
+            {exp.github && (
+              <motion.a
+                href={exp.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 font-mono text-sm text-gray-500 hover:text-gray-900 transition-colors"
+                whileHover={{ opacity: 0.85 }}
+              >
+                <Github className="h-4 w-4 shrink-0" />
+                <span>GitHub</span>
+                <ExternalLink className="h-3 w-3 shrink-0 opacity-70" />
+              </motion.a>
+            )}
+          </div>
           <div className="font-sans text-[17px] text-gray-600 mb-2 mt-2">
             {exp.description}
           </div>
@@ -98,6 +116,17 @@ function ExperienceRow({
             ))}
           </div>
         </div>
+        {exp.companyLogo ? (
+          <div className="relative h-10 w-20 flex-shrink-0">
+            <Image
+              src={exp.companyLogo}
+              alt=""
+              fill
+              className="object-contain object-right"
+              unoptimized={exp.companyLogo.endsWith(".svg")}
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -116,9 +145,7 @@ export function ExperienceSection({ experiences }: ExperienceSectionProps) {
               key={key}
               exp={exp}
               isExpanded={expandedKey === key}
-              onToggle={() =>
-                setExpandedKey((k) => (k === key ? null : key))
-              }
+              onToggle={() => setExpandedKey((k) => (k === key ? null : key))}
             />
           );
         })}

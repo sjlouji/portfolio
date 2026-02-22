@@ -26,7 +26,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
                 <div className="w-24 flex-shrink-0 text-xs uppercase text-gray-400 pt-1">
                   {project.date}
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 ml-10">
                   <motion.a
                     href={project.link}
                     target="_blank"

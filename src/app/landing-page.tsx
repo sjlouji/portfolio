@@ -17,7 +17,13 @@ import { PostSection } from "@/app/sections/post-section";
 export function LandingPage({
   initialData,
   blogs,
-}: LandingPageProps & { blogs: any[] }) {
+  blogsLoadFailed = false,
+  mediumProfileUrl = "https://medium.com/@sjlouji10",
+}: LandingPageProps & {
+  blogs: any[];
+  blogsLoadFailed?: boolean;
+  mediumProfileUrl?: string;
+}) {
   const [activeSection, setActiveSection] = useState("hero");
   const lastSection = useRef<string | null>(null);
 
@@ -73,7 +79,13 @@ export function LandingPage({
     about: <AboutSection about={initialData.about} />,
     experience: <ExperienceSection experiences={initialData.experience} />,
     works: <ProjectsSection projects={initialData.works} />,
-    posts: <PostSection blogs={blogs} />,
+    posts: (
+      <PostSection
+        blogs={blogs}
+        loadFailed={blogsLoadFailed}
+        mediumProfileUrl={mediumProfileUrl}
+      />
+    ),
     contact: <ContactSection contact={initialData.contact} />,
   };
 

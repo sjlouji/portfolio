@@ -1,25 +1,25 @@
 import { LandingPage } from "@/app/landing-page";
 import { portfolioData } from "@/lib/data";
-import { fetchMediumPosts } from "@/lib/fetchMedium";
+import { fetchMediumPosts, getMediumProfileUrl } from "@/lib/fetchMedium";
 
 export default async function Page() {
-  let blogs = [];
+  let blogs: Awaited<ReturnType<typeof fetchMediumPosts>>["posts"] = [];
+  let blogsLoadFailed = false;
   try {
-    blogs = await fetchMediumPosts("sjlouji10");
+    const result = await fetchMediumPosts("sjlouji10");
+    blogs = result.posts;
+    blogsLoadFailed = result.failed ?? false;
   } catch (error) {
     console.warn("Failed to fetch blogs in page:", error);
-    blogs = [
-      {
-        title: "Sample Blog Post",
-        link: "https://medium.com/@sjlouji10",
-        date: "Dec 15, 2023",
-        summary:
-          "This is a sample blog post. Check out my Medium profile for the latest articles.",
-        image: "",
-        tags: ["Sample", "Blog"],
-      },
-    ];
+    blogsLoadFailed = true;
   }
 
-  return <LandingPage initialData={portfolioData} blogs={blogs} />;
+  return (
+    <LandingPage
+      initialData={portfolioData}
+      blogs={blogs}
+      blogsLoadFailed={blogsLoadFailed}
+      mediumProfileUrl={getMediumProfileUrl()}
+    />
+  );
 }
