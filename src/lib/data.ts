@@ -246,6 +246,21 @@ export const portfolioData = {
       "data-ai-hint": "auth & identity service",
     },
     {
+      date: "September 2020",
+      title: "Flutter Clones & UI Collection",
+      description:
+        "This repository is a collection of Flutter projects where I recreated popular applications and built custom UI designs to strengthen my understanding of mobile app development. The goal was simple: learn by building. By cloning well-known apps and designing complete UI flows, I focused on mastering layouts, state management, navigation, and clean UI architecture in Flutter.",
+      tags: [
+        "Flutter",
+        "UI Design",
+        "State Management",
+        "Navigation",
+        "Clean Architecture",
+      ],
+      link: "https://github.com/sjlouji/flutter-clones-ui-collection",
+      "data-ai-hint": "flutter clones & ui collection",
+    },
+    {
       date: "March 2019",
       title: "ChatBlo Android",
       description:
@@ -275,21 +290,6 @@ export const portfolioData = {
       ],
       link: "https://github.com/sjlouji/ChatBloIOS",
       "data-ai-hint": "chatblo ios chat application",
-    },
-    {
-      date: "September 2020",
-      title: "Flutter Clones & UI Collection",
-      description:
-        "This repository is a collection of Flutter projects where I recreated popular applications and built custom UI designs to strengthen my understanding of mobile app development. The goal was simple: learn by building. By cloning well-known apps and designing complete UI flows, I focused on mastering layouts, state management, navigation, and clean UI architecture in Flutter.",
-      tags: [
-        "Flutter",
-        "UI Design",
-        "State Management",
-        "Navigation",
-        "Clean Architecture",
-      ],
-      link: "https://github.com/sjlouji/flutter-clones-ui-collection",
-      "data-ai-hint": "flutter clones & ui collection",
     },
   ],
   contact: {
