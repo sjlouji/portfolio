@@ -241,6 +241,15 @@ export const portfolioData = {
       "data-ai-hint": "gl code matching algorithms",
     },
     {
+      date: "May 2024",
+      title: "Project Fit - Bin packing algorithm",
+      description:
+        "Project Fit is a TypeScript-based 3D bin packing engine built to solve efficient packing problem. It intelligently packs items such as cartons and pallets into containers or trucks while respecting physical and operational constraints like weight limits, stackability, fragility, load-bearing capacity, and multi-stop delivery sequencing.  Alongside the engine, I built Fit Viewer, a React + Three.js web application that visually renders packing results in interactive 3D. It allows users to rotate, zoom, inspect items, and analyze metrics like space utilization, total weight, and center of gravity in real time.",
+      tags: ["TypeScript", "React", "Three.js", "Bin packing algorithm"],
+      link: "https://github.com/sjlouji/project-fit",
+      "data-ai-hint": "project fit - bin packing algorithm",
+    },
+    {
       date: "November 2023",
       title: "Auth & Identity Service",
       description:
