@@ -19,9 +19,10 @@ This file gives structure, conventions, and context so an AI can work in this re
 src/
 ├── app/                    # Next.js App Router + page composition only
 │   ├── page.tsx             # Single route; fetches data, renders <LandingPage />
-│   ├── layout.tsx           # Root layout (metadata, fonts, body)
+│   ├── layout.tsx           # Root layout (metadata, fonts, body, theme script, ThemeProvider)
 │   ├── landing-page.tsx     # Only “parent” page component in app/ root
 │   ├── components/          # App-specific UI (header, footer, section-wrapper)
+│   ├── providers/           # ThemeProvider (light/dark; reads localStorage + prefers-color-scheme)
 │   └── sections/            # Full-page sections (hero, about, experience, works, posts, contact, resume)
 ├── components/              # Shared UI (buttons, dialogs, pagination, etc.; many from shadcn/radix)
 ├── hooks/                   # Shared hooks (use-toast, use-mobile, use-scroll-hash)
@@ -59,6 +60,7 @@ src/
 - **Content edits:** All editable content lives in `src/lib/data.ts` only. Hero, about, experience, works, contact, nav labels/links, resume/print data—everything goes in `portfolioData` (or related exports in that file). Never put portfolio content in section components or other files.
 - **Blog posts:** Fetched at build/request time in `page.tsx` via `fetchMediumPosts("sjlouji10")`. Fallback array used on failure. Limit and shape are defined in `lib/fetchMedium.ts`.
 - **Styling:** Tailwind. Global styles and CSS variables in `src/assets/styles/globals.css`. Config in `tailwind.config.ts`. Use existing utility patterns (e.g. section list styling in works/posts/experience is aligned: `divide-y`, left date/period column, same font sizes).
+- **Theme (light/dark):** Tailwind `darkMode: ["class"]`. Root layout runs an inline script before paint (from `localStorage.theme` or `prefers-color-scheme`) and wraps the app in `ThemeProvider` (`app/providers/theme-provider.tsx`). Toggle lives in the header (`components/theme-toggle.tsx`; sun/moon icon). Preference is persisted in `localStorage` under key `theme`. Use semantic tokens (`bg-background`, `text-foreground`, `text-muted-foreground`, `bg-secondary`, etc.) so sections adapt to dark; avoid hardcoded grays or `bg-white` in section UIs.
 - **Contact section:** Uses `!py-0` on SectionWrapper and custom padding (`pt-24 pb-20`). Contact section wrapper in `landing-page.tsx` does **not** use `min-h-screen` so the footer sits close below it.
 - **Experience section:** Supports optional `highlights` (string[]) per role; when present, “View full role” expands to show bullet list. Types in `types/experience.ts`.
 - **Pando & Freehand:** Both under same org; `organization: "Quaking Aspen Pvt Ltd"` is set on those experience entries and shown in the UI as “Company · Organization”.
