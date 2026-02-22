@@ -61,16 +61,16 @@ export function PostSection({
             key={post.title}
             className="flex flex-col transition-colors py-6"
           >
-            <div className="flex items-start">
-              <div className="w-24 flex-shrink-0 text-xs uppercase text-muted-foreground pt-1">
+            <div className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-0">
+              <div className="w-full sm:w-24 flex-shrink-0 text-xs uppercase text-muted-foreground pt-1">
                 {post.date}
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <motion.a
                   href={post.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center text-lg md:text-xl font-mono font-medium text-foreground hover:underline focus:underline transition group"
+                  className="inline-flex items-center text-lg sm:text-xl font-mono font-medium text-foreground hover:underline focus:underline transition group break-words"
                   whileHover={{ x: 8 }}
                 >
                   {post.title}
@@ -98,7 +98,7 @@ export function PostSection({
                 </div>
               </div>
               {post.image && (
-                <div className="w-20 h-16 flex-shrink-0 ml-4">
+                <div className="w-full sm:w-20 h-32 sm:h-16 flex-shrink-0 sm:ml-4 mt-2 sm:mt-0 order-last sm:order-none">
                   <img
                     src={post.image}
                     alt={post.title}

@@ -18,7 +18,7 @@ function SectionHeading({ number, title }: { number: string; title: string }) {
   );
 }
 
-const INITIAL_PARAS = 3;
+const INITIAL_PARAS = 2;
 
 export function AboutSection({ about }: { about: AboutSectionProps }) {
   const sectionRef = useRef<HTMLElement>(null);

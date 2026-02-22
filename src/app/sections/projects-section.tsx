@@ -22,16 +22,16 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
               key={project.title}
               className="flex flex-col transition-colors py-6"
             >
-              <div className="flex items-start">
-                <div className="w-24 flex-shrink-0 text-xs uppercase text-muted-foreground pt-1">
+              <div className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-0">
+                <div className="w-full sm:w-24 flex-shrink-0 text-xs uppercase text-muted-foreground pt-1">
                   {project.date}
                 </div>
-                <div className="flex-1 ml-10">
+                <div className="flex-1 min-w-0 sm:ml-10">
                   <motion.a
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-xl md:text-xl font-mono font-medium text-foreground hover:underline focus:underline transition group"
+                    className="block sm:inline-flex text-lg sm:text-xl font-mono font-medium text-foreground hover:underline focus:underline transition group break-words"
                     whileHover={{ x: 8 }}
                   >
                     {project.title}

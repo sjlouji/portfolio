@@ -23,28 +23,39 @@ function ExperienceRow({
   const hasDetail = exp.highlights?.length;
   return (
     <div className="flex flex-col transition-colors py-6">
-      <div className="flex items-start gap-6">
-        <div className="w-28 flex-shrink-0">
+      <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-6">
+        <div className="flex items-start justify-between gap-4 w-full sm:w-28 flex-shrink-0">
           <span className="text-xs uppercase tracking-wider text-muted-foreground">
             {exp.period}
           </span>
+          {exp.companyLogo ? (
+            <div className="relative h-10 w-20 flex-shrink-0 sm:hidden">
+              <Image
+                src={exp.companyLogo}
+                alt=""
+                fill
+                className="object-contain object-right"
+                unoptimized={exp.companyLogo.endsWith(".svg")}
+              />
+            </div>
+          ) : null}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <motion.a
               href={exp.companyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xl font-mono font-medium text-foreground hover:underline focus:underline transition-colors"
+              className="flex flex-col sm:inline-flex sm:flex-row sm:items-center gap-0 sm:gap-1.5 text-lg sm:text-xl font-mono font-medium text-foreground hover:underline focus:underline transition-colors break-words min-w-0"
               whileHover={{ opacity: 0.85 }}
             >
-              {exp.role}
+              <span>{exp.role}</span>
               <span className="text-muted-foreground font-normal">
-                {" · "}
+                <span className="hidden sm:inline"> · </span>
                 {exp.company}
                 {exp.organization ? ` · ${exp.organization}` : ""}
               </span>
-              <ExternalLink className="h-4 w-4 shrink-0 opacity-70" />
+              <ExternalLink className="h-4 w-4 shrink-0 opacity-70 self-start sm:self-center" />
             </motion.a>
             {exp.github && (
               <motion.a
@@ -117,7 +128,7 @@ function ExperienceRow({
           </div>
         </div>
         {exp.companyLogo ? (
-          <div className="relative h-10 w-20 flex-shrink-0">
+          <div className="relative h-10 w-20 flex-shrink-0 hidden sm:block">
             <Image
               src={exp.companyLogo}
               alt=""
