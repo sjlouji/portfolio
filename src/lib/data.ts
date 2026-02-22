@@ -90,8 +90,22 @@ export const portfolioData = {
       companyUrl: "https://www.linkedin.com/company/freehand",
       organization: "Quaking Aspen Pvt Ltd",
       description:
-        "Part of the Autonomous Supply Chain product development team. Building and enhancing software products that solve complex supply chain problems and make a real impact.",
-      tags: ["TypeScript", "JavaScript", "Node.js", "React", "Vue.js"],
+        "Part of the Autonomous Supply Chain team, building GenAI driven logistics systems from rate card extractions to complex rate costing logics with a focus on designing intelligent agent team that adapt to frequently evolving business logic.",
+      tags: [
+        "Generative AI",
+        "Document Intelligence",
+        "Embedding Models",
+        "AI Agents",
+        "TypeScript",
+        "Node.js",
+        "Python",
+        "AWS",
+      ],
+      highlights: [
+        "Developing GenAI-driven solutions for logistics finance, Gen AI based costing logic generation, OCR-based rate card extraction, and document intelligence. Building reliable pipelines that convert raw contracts and pricing documents into structured, audit-ready data.",
+        "Designing and integrating AI models for costing logic formula generation and document processing, handling everything from model evaluation to end-to-end system design. Continuously improving system clarity, reducing technical debt, and Solutioning financial logic to remain accurate & traceable.",
+        "Contributing to a complex agent-based system, designed to scale and handle billions of shipments, contracts, and pricing documents with precision.",
+      ],
     },
     {
       period: "Feb 2025 — Jan 2026",
@@ -101,7 +115,22 @@ export const portfolioData = {
       organization: "Quaking Aspen Pvt Ltd",
       description:
         "Continued ownership of critical modules and mentoring. Drove technical decisions and collaborated with cross-functional teams on the Cost Engine and Rate Management systems.",
-      tags: ["Vue 3", "Microservices", "AWS", "Node.js", "TypeScript"],
+      highlights: [
+        "Led Sprint Team Delivery: Managed and mentored a sprint team, driving planning, execution, and delivery of high-impact logistics finance features.",
+        "Architected Next-Generation Cost Engine: Designed and built the next version of the Cost Engine from scratch, improving scalability.",
+        "Financial Workflow Optimization: Improved costing accuracy, reconciliation logic, and system performance for high-volume shipment processing.",
+        "Rate Card Rule-Based Extraction: Designed and implemented rule-based rate card extraction pipelines to transform complex contract documents into structured pricing data.",
+        "Mentorship & Engineering Standards: Mentored junior engineers, conducted design reviews, and maintained high code quality through structured reviews.",
+      ],
+      tags: [
+        "TypeScript",
+        "Microservices",
+        "AWS",
+        "Node.js",
+        "Vue 3",
+        "Python",
+        "Java",
+      ],
     },
     {
       period: "May 2023 — Feb 2025",
@@ -110,16 +139,13 @@ export const portfolioData = {
       companyUrl: "https://www.pando.ai",
       organization: "Quaking Aspen Pvt Ltd",
       description:
-        "After my promotion to SDE 1 at Pando, I took on more advanced responsibilities that helped me grow further as a developer.",
+        "Played a key role in modernizing and scaling the logistics costing platform from migrating to microservices and upgrading the frontend, strengthening security, optimizing high-volume data pipelines, and mentoring engineers through code reviews and hiring.",
       highlights: [
-        "Migrated to Microservice Architecture: Transformed the Cost Engine and Rate Management monolithic product into a microservice architecture.",
-        "Migrated to Vue 3: Successfully migrated the Costing Engine and Rate management frontend from Vue 2 to Vue 3, improving performance and leveraging new features.",
-        "Developed Authentication Services: Created authentication services for both external microservices and internal services within the microservices framework.",
-        "Data Encryption: Implemented data encryption to secure incoming data, enhancing the overall security of Pando's systems.",
-        "Vue 3 Component Library: Established a new repository for a Vue 3 component library and integrated it with Storybook for better documentation and development.",
-        "Handled High-Volume Requests: Worked on Costing Engine which costs shipment data based on contracts. Managed to handle billions of requests efficiently.",
-        "Data Pipelines and Lambdas: Created and optimized data pipelines and AWS Lambda functions to handle billions of requests.",
-        "Code Reviews and Hiring: Regular code reviews and participated in the hiring process by conducting initial and second-round technical interviews.",
+        "Migrated to Microservice Architecture: Successfully transformed the Cost Engine and Rate Management monolithic product into a microservice architecture, improving scalability and maintainability.",
+        "Upgraded Frontend to Vue 3: Successfully migrated the Costing Engine and Rate management frontend from Vue 2 to Vue 3, improving performance and leveraging new features.",
+        "Strengthened Security: Implemented data encryption to secure incoming data, enhancing the overall security of Pando's systems.",
+        "Optimized High-Volume Data Pipelines: Created and optimized data pipelines and AWS Lambda functions to handle billions of requests efficiently.",
+        "Mentored Engineers: Regular code reviews and participated in the hiring process by conducting initial and second-round technical interviews.",
       ],
       tags: [
         "Vue 3",
@@ -137,15 +163,15 @@ export const portfolioData = {
       companyUrl: "https://www.pando.ai",
       organization: "Quaking Aspen Pvt Ltd",
       description:
-        "After my SDE Internship at Pando, I took on various responsibilities, working on different modules and projects.",
+        "Worked across multiple logistics teams, integrating TMS with external systems, building warehouse APIs, enabling real-time data synchronization across integration pipelines, and supporting the transition to Flutter while contributing to hiring and team development.",
       highlights: [
-        "Worked on TMS module: Integrated TMS with external software, including packing solutions, warehouse management software, dangerous goods solutions, and document service.",
-        "Developed warehouse management software: Created the entire API Service using Node.js and Express JS, and integrated it with the client's Informatica service.",
-        "Worked on procurement software: Implemented WebSockets and polling techniques for live data transfer between the backend and frontend.",
-        "Developed last-mile optimization solutions: Worked on optimization algorithms and APIs to optimize and visualize orders.",
-        "Bootstrapped the first Flutter application at Pando: Migrated a native Android app to Flutter. Participated in recruitment, conducting initial interviews for Flutter developers.",
+        "Integrated TMS with external software, including packing solutions, warehouse management software, dangerous goods solutions, and document service.",
+        "Created the entire API Service using Node.js and Express JS, and integrated it with the client's Informatica service.",
+        "Implemented WebSockets and polling techniques for live data transfer when transporter bid for a shipment.",
+        "Worked on optimization algorithms and Visualization of packing optimization using D3.js",
+        "Migrated a native Android app to Flutter, participating in recruitment, conducting initial interviews for Flutter developers.",
       ],
-      tags: ["Node.js", "Express", "Vue.js", "Flutter", "WebSockets"],
+      tags: ["Node.js", "Express", "Vue.js", "Flutter", "WebSockets", "D3.js"],
     },
     {
       period: "Dec 2020 — Feb 2021",
@@ -156,7 +182,7 @@ export const portfolioData = {
       description:
         "Developed a new service that acted as an intermediary between third-party carriers and Pando for shipment bookings, edits, cancellations, and tracking.",
       highlights: [
-        "Developed a new intermediary service: Enabled shipment bookings, edits, cancellations, and tracking between 4 third-party US-based carriers and Pando.",
+        "Developed a new intermediary service that enabled shipment bookings, edits, cancellations, and tracking between 4 third-party US-based carriers and Pando.",
         "Studied and integrated documentation from four major US carriers to ensure seamless integration with Pando's TMS software.",
         "Worked extensively with Node.js, Vue.js, MongoDB, worker threads, Docker, AWS EC2, and S3.",
         "Architected applications and participated in client meetings to help triage and resolve issues.",
