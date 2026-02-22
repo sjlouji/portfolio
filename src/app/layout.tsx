@@ -6,7 +6,7 @@ import { ThemeProvider } from "@/app/providers/theme-provider";
 
 export const metadata = {
   icons: {
-    icon: "/images/logo.svg",
+    icon: ["/images/logo.svg?v=2"],
   },
 };
 
