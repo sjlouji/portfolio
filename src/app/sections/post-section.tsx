@@ -62,7 +62,7 @@ export function PostSection({
             className="flex flex-col transition-colors py-6"
           >
             <div className="flex items-start">
-              <div className="w-24 flex-shrink-0 text-xs uppercase text-gray-400 pt-1">
+              <div className="w-24 flex-shrink-0 text-xs uppercase text-muted-foreground pt-1">
                 {post.date}
               </div>
               <div className="flex-1">
@@ -70,12 +70,12 @@ export function PostSection({
                   href={post.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center text-lg md:text-xl font-mono font-medium text-gray-900 hover:underline focus:underline transition group"
+                  className="inline-flex items-center text-lg md:text-xl font-mono font-medium text-foreground hover:underline focus:underline transition group"
                   whileHover={{ x: 8 }}
                 >
                   {post.title}
                 </motion.a>
-                <div className="font-sans text-[17px] text-gray-600 mb-2 mt-2">
+                <div className="font-sans text-[17px] text-muted-foreground mb-2 mt-2">
                   {post.summary.length > 150
                     ? `${post.summary.substring(0, 150)}...`
                     : post.summary}
@@ -84,7 +84,7 @@ export function PostSection({
                   {post.tags.map((tag) => (
                     <motion.span
                       key={tag}
-                      className="inline-block bg-gray-200 text-xs md:text-sm font-mono text-gray-700 rounded px-2 py-0.5 leading-tight cursor-pointer"
+                      className="inline-block bg-secondary text-xs md:text-sm font-mono text-secondary-foreground rounded px-2 py-0.5 leading-tight cursor-pointer"
                       whileHover={{
                         scale: 1.12,
                         backgroundColor: "#dbeafe",

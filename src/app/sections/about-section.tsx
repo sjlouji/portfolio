@@ -75,7 +75,7 @@ export function AboutSection({ about }: { about: AboutSectionProps }) {
               <button
                 type="button"
                 onClick={() => setExpanded((e) => !e)}
-                className="mt-3 inline-flex items-center gap-1 font-mono text-xs text-gray-500 hover:text-gray-900 transition-colors"
+                className="mt-3 inline-flex items-center gap-1 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 {expanded ? (
                   <>
