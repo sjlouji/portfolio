@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Pagination } from "@/components/pagination";
 import { SectionWrapper } from "@/app/components/section-wrapper";
+import { ExternalLink } from "lucide-react";
 
 const PAGE_SIZE = 4;
 
@@ -14,11 +15,43 @@ export interface BlogPost {
   tags: string[];
 }
 
-export function PostSection({ blogs }: { blogs: BlogPost[] }) {
+export function PostSection({
+  blogs,
+  loadFailed = false,
+  mediumProfileUrl = "https://medium.com/@sjlouji10",
+}: {
+  blogs: BlogPost[];
+  loadFailed?: boolean;
+  mediumProfileUrl?: string;
+}) {
   const [page, setPage] = useState(1);
   const totalPages = Math.ceil(blogs.length / PAGE_SIZE);
   const startIdx = (page - 1) * PAGE_SIZE;
   const visibleBlogs = blogs.slice(startIdx, startIdx + PAGE_SIZE);
+
+  if (loadFailed && blogs.length === 0) {
+    return (
+      <SectionWrapper id="posts" title="Posts">
+        <div className="rounded-lg border border-border bg-muted/30 px-6 py-10 text-center">
+          <p className="font-sans text-[17px] text-muted-foreground">
+            There was trouble loading blog posts from Medium.
+          </p>
+          <p className="mt-2 font-sans text-[17px] text-muted-foreground">
+            Try navigating to{" "}
+            <a
+              href={mediumProfileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-primary hover:underline"
+            >
+              {mediumProfileUrl}
+              <ExternalLink className="h-4 w-4 shrink-0" />
+            </a>
+          </p>
+        </div>
+      </SectionWrapper>
+    );
+  }
 
   return (
     <SectionWrapper id="posts" title="Posts">
