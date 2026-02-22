@@ -24,18 +24,7 @@ function ExperienceRow({
   return (
     <div className="flex flex-col transition-colors py-6">
       <div className="flex items-start gap-6">
-        <div className="flex w-28 flex-shrink-0 flex-col items-start gap-2">
-          {exp.companyLogo ? (
-            <div className="relative h-10 w-20">
-              <Image
-                src={exp.companyLogo}
-                alt=""
-                fill
-                className="object-contain object-left"
-                unoptimized={exp.companyLogo.endsWith(".svg")}
-              />
-            </div>
-          ) : null}
+        <div className="w-28 flex-shrink-0">
           <span className="text-xs uppercase tracking-wider text-gray-400">
             {exp.period}
           </span>
@@ -127,6 +116,17 @@ function ExperienceRow({
             ))}
           </div>
         </div>
+        {exp.companyLogo ? (
+          <div className="relative h-10 w-20 flex-shrink-0">
+            <Image
+              src={exp.companyLogo}
+              alt=""
+              fill
+              className="object-contain object-right"
+              unoptimized={exp.companyLogo.endsWith(".svg")}
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );
