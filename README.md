@@ -8,8 +8,6 @@ Built with Next.js, React, TypeScript, Tailwind CSS, and Framer Motion.
 
 **Want to contribute?** See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-**License:** [MIT](LICENSE)
-
 ---
 
 ## How to run it
