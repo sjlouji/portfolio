@@ -206,17 +206,8 @@ export const portfolioData = {
       "data-ai-hint": "level up game hub",
     },
     {
-      date: "June 2025",
-      title: "Joan Louji's Portfolio Website",
-      description:
-        "This is my personal website, a place where I share who I am, what I’ve built, and what I’m currently working on. It includes an introduction, my experience, selected projects, blog posts from Medium, and a simple way to get in touch. I built it with Next.js, React, TypeScript, Tailwind CSS, and Framer Motion, focusing on clean structure, smooth interactions, and long-term maintainability. The idea was to keep the design minimal while making the architecture easy to extend and update.",
-      tags: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
-      link: "https://joanlouji.vercel.app",
-      "data-ai-hint": "portfolio website",
-    },
-    {
-      date: "Excel Table Extractor",
-      title: "Joan Louji's Portfolio Website",
+      date: "October 2025",
+      title: "Excel Table Extractor",
       description:
         "Excel Table Extractor is a utility I built to intelligently detect and extract structured tables from Excel files or raw 2D arrays.  Instead of assuming perfect formatting, this tool identifies connected groups of cells that form meaningful tables — even when the layout includes gaps, merged cells, or irregular structures. It’s designed to handle real-world Excel data, where formatting is rarely clean.  The extractor works in both Node.js and browser environments, making it flexible for backend processing as well as client-side applications.",
       tags: [
@@ -225,6 +216,15 @@ export const portfolioData = {
         "Algorithmic Table Detection",
       ],
       "data-ai-hint": "excel table extractor",
+    },
+    {
+      date: "June 2025",
+      title: "Joan Louji's Portfolio Website",
+      description:
+        "This is my personal website, a place where I share who I am, what I’ve built, and what I’m currently working on. It includes an introduction, my experience, selected projects, blog posts from Medium, and a simple way to get in touch. I built it with Next.js, React, TypeScript, Tailwind CSS, and Framer Motion, focusing on clean structure, smooth interactions, and long-term maintainability. The idea was to keep the design minimal while making the architecture easy to extend and update.",
+      tags: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+      link: "https://joanlouji.vercel.app",
+      "data-ai-hint": "portfolio website",
     },
     {
       date: "August 2024",
