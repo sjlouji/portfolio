@@ -2,7 +2,7 @@
 
 A personal website. It has an intro, my experience, projects, blog posts from Medium, and a way to get in touch.
 
-Built with Next.js, React, TypeScript, Tailwind CSS, and Framer Motion.
+Built with Next.js, React, TypeScript, Tailwind CSS, and Framer Motion. Supports **light and dark theme** (toggle in the header; preference saved in the browser).
 
 **Found a bug or want to suggest something?** When you open a new issue on GitHub, use the [issue template](.github/ISSUE_TEMPLATE/issue.md).
 
@@ -38,6 +38,8 @@ Edit that file to change:
 
 Blog posts are pulled from Medium when someone opens the site. That is set up in `src/lib/fetchMedium.ts`.
 
+**Light/dark theme:** Use the sun/moon icon in the top bar to switch. The choice is stored in your browser and used on the next visit.
+
 ---
 
 ## Where things are in the code
@@ -48,6 +50,8 @@ Blog posts are pulled from Medium when someone opens the site. That is set up in
 - **`src/app/components/`** — The top bar, bottom bar, and the wrapper around each section.
 - **`src/lib/data.ts`** — All the content. Change this to change what appears on the site.
 - **`src/types/`** — TypeScript types. One file per section.
+- **`src/app/providers/theme-provider.tsx`** — Theme context (light/dark); reads `localStorage` and system preference.
+- **`src/components/theme-toggle.tsx`** — Header button that toggles theme.
 
 ---
 

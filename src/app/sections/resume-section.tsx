@@ -338,7 +338,7 @@ export function ResumeSection() {
         <div className="w-full max-w-5xl mx-auto mb-6 flex justify-end">
           <button onClick={reactToPrintFn}>Download PDF</button>
         </div>
-        <div className="w-full max-w-5xl mx-auto bg-white rounded-lg">
+        <div className="w-full max-w-5xl mx-auto bg-background rounded-lg">
           <div ref={previewRef} className="w-[210mm] h-[297mm] mx-auto">
             <ResumePreview data={initialData} />
           </div>

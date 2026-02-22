@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { MotionImage } from "@/components/motion-image";
 import { AnimatedNavLink } from "@/components/animated-nav-link";
+import { ThemeToggle } from "@/components/theme-toggle";
 import type { HeaderSectionProps } from "@/types/header";
 
 export function Header({ content }: { content: HeaderSectionProps }) {
@@ -27,13 +28,16 @@ export function Header({ content }: { content: HeaderSectionProps }) {
             className="h-8 w-8 shrink-0"
           />
         </Link>
-        <nav className="hidden md:flex space-x-10 text-lg font-medium ml-auto">
-          {sections?.map((section: { name: string; href: string }) => (
-            <AnimatedNavLink key={section.href} href={section.href}>
-              {section.name}
-            </AnimatedNavLink>
-          ))}
-        </nav>
+        <div className="flex items-center gap-4 ml-auto">
+          <nav className="hidden md:flex items-center space-x-10 text-lg font-medium">
+            {sections?.map((section: { name: string; href: string }) => (
+              <AnimatedNavLink key={section.href} href={section.href}>
+                {section.name}
+              </AnimatedNavLink>
+            ))}
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

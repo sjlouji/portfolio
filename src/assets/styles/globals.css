@@ -132,6 +132,6 @@
     font-size: 26px;
     line-height: 1.5;
     font-weight: 500;
-    color: #3d3d3d;
+    @apply text-muted-foreground;
   }
 }

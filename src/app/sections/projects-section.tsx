@@ -23,7 +23,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
               className="flex flex-col transition-colors py-6"
             >
               <div className="flex items-start">
-                <div className="w-24 flex-shrink-0 text-xs uppercase text-gray-400 pt-1">
+                <div className="w-24 flex-shrink-0 text-xs uppercase text-muted-foreground pt-1">
                   {project.date}
                 </div>
                 <div className="flex-1 ml-10">
@@ -31,19 +31,19 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-xl md:text-xl font-mono font-medium text-gray-900 hover:underline focus:underline transition group"
+                    className="inline-flex items-center text-xl md:text-xl font-mono font-medium text-foreground hover:underline focus:underline transition group"
                     whileHover={{ x: 8 }}
                   >
                     {project.title}
                   </motion.a>
-                  <div className="font-sans text-[17px] text-gray-600 mb-2 mt-2">
+                  <div className="font-sans text-[17px] text-muted-foreground mb-2 mt-2">
                     {project.description}
                   </div>
                   <div className="flex flex-wrap items-center gap-2 mt-2">
                     {project.tags.map((tag) => (
                       <motion.span
                         key={tag}
-                        className="inline-block bg-gray-200 text-xs md:text-sm font-mono text-gray-700 rounded px-2 py-0.5 leading-tight cursor-pointer"
+                        className="inline-block bg-secondary text-xs md:text-sm font-mono text-secondary-foreground rounded px-2 py-0.5 leading-tight cursor-pointer"
                         whileHover={{
                           scale: 1.12,
                           backgroundColor: "#dbeafe",

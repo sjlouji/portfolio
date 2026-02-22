@@ -25,7 +25,7 @@ function ExperienceRow({
     <div className="flex flex-col transition-colors py-6">
       <div className="flex items-start gap-6">
         <div className="w-28 flex-shrink-0">
-          <span className="text-xs uppercase tracking-wider text-gray-400">
+          <span className="text-xs uppercase tracking-wider text-muted-foreground">
             {exp.period}
           </span>
         </div>
@@ -35,11 +35,11 @@ function ExperienceRow({
               href={exp.companyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xl font-mono font-medium text-gray-900 hover:underline focus:underline transition-colors"
+              className="inline-flex items-center gap-1.5 text-xl font-mono font-medium text-foreground hover:underline focus:underline transition-colors"
               whileHover={{ opacity: 0.85 }}
             >
               {exp.role}
-              <span className="text-gray-500 font-normal">
+              <span className="text-muted-foreground font-normal">
                 {" · "}
                 {exp.company}
                 {exp.organization ? ` · ${exp.organization}` : ""}
@@ -51,7 +51,7 @@ function ExperienceRow({
                 href={exp.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 font-mono text-sm text-gray-500 hover:text-gray-900 transition-colors"
+                className="inline-flex items-center gap-1.5 font-mono text-sm text-muted-foreground hover:text-foreground transition-colors"
                 whileHover={{ opacity: 0.85 }}
               >
                 <Github className="h-4 w-4 shrink-0" />
@@ -60,7 +60,7 @@ function ExperienceRow({
               </motion.a>
             )}
           </div>
-          <div className="font-sans text-[17px] text-gray-600 mb-2 mt-2">
+          <div className="font-sans text-[17px] text-muted-foreground mb-2 mt-2">
             {exp.description}
           </div>
           <AnimatePresence initial={false}>
@@ -72,7 +72,7 @@ function ExperienceRow({
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden"
               >
-                <ul className="list-disc list-outside ml-4 mt-3 space-y-2 font-sans text-[17px] text-gray-600">
+                <ul className="list-disc list-outside ml-4 mt-3 space-y-2 font-sans text-[17px] text-muted-foreground">
                   {exp.highlights!.map((item, i) => (
                     <li key={i} className="pl-1">
                       {item}
@@ -86,7 +86,7 @@ function ExperienceRow({
             <button
               type="button"
               onClick={onToggle}
-              className="mt-3 inline-flex items-center gap-1 font-mono text-xs text-gray-500 hover:text-gray-900 transition-colors"
+              className="mt-3 inline-flex items-center gap-1 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               {isExpanded ? (
                 <>
@@ -103,7 +103,7 @@ function ExperienceRow({
             {exp.tags.map((tag) => (
               <motion.span
                 key={tag}
-                className="inline-block bg-gray-200 text-xs md:text-sm font-mono text-gray-700 rounded px-2 py-0.5 leading-tight cursor-pointer"
+                className="inline-block bg-secondary text-xs md:text-sm font-mono text-secondary-foreground rounded px-2 py-0.5 leading-tight cursor-pointer"
                 whileHover={{
                   scale: 1.12,
                   backgroundColor: "#dbeafe",
