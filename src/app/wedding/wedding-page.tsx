@@ -1,377 +1,390 @@
-"use client";
+// Faithful port of the trifold wedding-invitation design.
+// Fonts are loaded as CSS variables in ./layout.tsx
+// (--font-cinzel, --font-playfair, --font-pinyon, --font-montserrat).
 
-import { useState, useEffect, useRef, useMemo } from "react";
-import { motion } from "framer-motion";
-import { MapPin, Gem, Star, UtensilsCrossed, Sparkles } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-
-// ─── Palette ──────────────────────────────────────────────────────────────────
-const C = {
-  wine:       "#5C1A2E",   // deep burgundy — headings, active UI
-  rose:       "#8B4D60",   // medium rose   — icons, secondary text
-  gold:       "#B8903C",   // warm gold     — accents, time labels
-  goldLight:  "#E8D0B8",   // champagne     — spine, borders
-  goldPale:   "#F5E9D4",   // pale gold     — node bg, card tint
-  ivory:      "#FBF5EE",   // warm ivory    — page bg
-  text:       "#3D2030",   // dark body text
-  muted:      "#9B7080",   // muted text
-} as const;
-
-// ─── Countdown ────────────────────────────────────────────────────────────────
-
-interface CountdownTime { days: number; hours: number; minutes: number; seconds: number }
-
-function useCountdown(target: Date): CountdownTime {
-  const [time, setTime] = useState<CountdownTime>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  useEffect(() => {
-    const tick = () => {
-      const diff = target.getTime() - Date.now();
-      if (diff <= 0) { setTime({ days: 0, hours: 0, minutes: 0, seconds: 0 }); return; }
-      setTime({
-        days:    Math.floor(diff / 86_400_000),
-        hours:   Math.floor((diff / 3_600_000) % 24),
-        minutes: Math.floor((diff / 60_000) % 60),
-        seconds: Math.floor((diff / 1_000) % 60),
-      });
-    };
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, [target]);
-  return time;
-}
-
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
-interface EventItem {
-  id: string; title: string; Icon: LucideIcon;
-  timeShort: string; timeFull: string; venue: string; mapsUrl: string;
-}
-
-const EVENTS: { dayId: string; label: string; items: EventItem[] }[] = [
-  {
-    dayId: "jul-11",
-    label: "Friday, July 11th",
-    items: [{
-      id: "engagement", title: "Engagement", Icon: Gem,
-      timeShort: "6 PM", timeFull: "6:00 PM",
-      venue: "Gurusamy Kovil Thirumana Mahal",
-      mapsUrl: "https://maps.app.goo.gl/oXoqtKZHTcfq8GfN6",
-    }],
-  },
-  {
-    dayId: "jul-12",
-    label: "Saturday, July 12th",
-    items: [
-      {
-        id: "marriage", title: "Marriage Ceremony", Icon: Star,
-        timeShort: "10 AM", timeFull: "10:00 AM",
-        venue: "St. Antony's Church, Pavoorchatram",
-        mapsUrl: "https://maps.app.goo.gl/TRg1nbJ4DpmHxWk96",
-      },
-      {
-        id: "lunch", title: "Lunch", Icon: UtensilsCrossed,
-        timeShort: "12 PM", timeFull: "12:00 PM – 4:00 PM",
-        venue: "Gurusamy Kovil Thirumana Mahal",
-        mapsUrl: "https://maps.app.goo.gl/oXoqtKZHTcfq8GfN6",
-      },
-      {
-        id: "reception", title: "Reception", Icon: Sparkles,
-        timeShort: "6 PM", timeFull: "6:00 PM – 10:00 PM",
-        venue: "SK Thanga Rathinam Thirumana Mahal",
-        mapsUrl: "https://maps.app.goo.gl/iGvpt9eaYKT3HfiN9",
-      },
-    ],
-  },
+const TIMELINE = [
+  { side: "item-right", ico: "ico-entrance", label: "3pm Entrance" },
+  { side: "item-left", ico: "ico-ceremony", label: "4pm Ceremony" },
+  { side: "item-right", ico: "ico-drinks", label: "5pm Drinks" },
+  { side: "item-left", ico: "ico-dinner", label: "6pm Dinner" },
+  { side: "item-right", ico: "ico-cake", label: "7pm Cake Cutting" },
+  { side: "item-left", ico: "ico-dance", label: "8pm Dance" },
+  { side: "item-right", ico: "ico-photos", label: "9pm Photos" },
+  { side: "item-left", ico: "ico-sendoff", label: "10pm Send-off" },
 ];
 
-// ─── TimelineItem ─────────────────────────────────────────────────────────────
+const css = `
+html, body { background-color: #ffffff !important; }
 
-function TimelineItem({
-  item, index, isFirst, isLast,
-}: {
-  item: EventItem; index: number; isFirst: boolean; isLast: boolean;
-}) {
-  const { Icon } = item;
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.09 + 0.25, duration: 0.5 }}
-    >
-      {/*
-        Keep the grid on a plain div, not the motion.div, so Framer Motion
-        never touches the layout properties. Two equal `1fr` columns + a
-        fixed 40 px centre column guarantees the spine sits at exactly 50%
-        of the available width regardless of content size.
-      */}
-      <div
-        className="w-full"
-        style={{ display: "grid", gridTemplateColumns: "1fr 1fr 2fr" }}
-      >
-        {/* ── Left: time label ── */}
-        <div className="text-right pr-4 pt-[10px]">
-          <span
-            className="text-[11px] font-bold tracking-[0.14em] uppercase tabular-nums leading-none"
-            style={{ color: C.gold }}
-          >
-            {item.timeShort}
-          </span>
-        </div>
-
-        {/* ── Centre: spine + node ── */}
-        <div className="flex flex-col items-center">
-          {!isFirst && (
-            <div className="w-px h-5 -mt-3" style={{ background: C.goldLight }} />
-          )}
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 border-2"
-            style={{ borderColor: C.gold, background: C.goldPale }}
-          >
-            <Icon className="w-[15px] h-[15px]" style={{ color: C.rose }} strokeWidth={1.5} />
-          </div>
-          {!isLast && (
-            <div
-              className="w-px flex-1 min-h-[80px] mt-0.5"
-              style={{ background: `linear-gradient(to bottom, ${C.goldLight}, ${C.goldLight}55)` }}
-            />
-          )}
-        </div>
-
-        {/* ── Right: event details ── */}
-        <div className={`pl-4 pt-2 min-w-0 ${!isLast ? "pb-10" : "pb-0"}`}>
-          <p
-            className="text-[11px] font-bold uppercase tracking-[0.14em] leading-tight"
-            style={{ color: C.wine }}
-          >
-            {item.title}
-          </p>
-          <p className="text-[11px] mt-0.5 tracking-wider" style={{ color: C.gold }}>
-            {item.timeFull}
-          </p>
-          <p className="text-[12px] mt-1 leading-snug" style={{ color: C.muted }}>
-            {item.venue}
-          </p>
-          <a
-            href={item.mapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 mt-3 text-[9px] font-bold uppercase tracking-[0.18em] border px-3 py-1.5 active:scale-95 transition-all duration-150"
-            style={{ borderColor: C.gold, color: C.gold }}
-          >
-            <MapPin className="w-2.5 h-2.5" />
-            Get Directions
-          </a>
-        </div>
-      </div>
-    </motion.div>
-  );
+.wedding-page {
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: var(--font-montserrat), sans-serif;
+  padding: 20px;
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+.invitation-container {
+  position: relative;
+  display: flex;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.22'/%3E%3C/svg%3E");
+  width: 1000px;
+  max-width: 100%;
+  min-height: 600px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 12px 28px rgba(0, 0, 0, 0.08),
+    0 30px 60px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* Paper folds + soft vignette overlay */
+.invitation-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, transparent 22.5%, rgba(0, 0, 0, 0.05) 25%, transparent 27.5%),
+    linear-gradient(90deg, transparent 72.5%, rgba(0, 0, 0, 0.05) 75%, transparent 77.5%),
+    radial-gradient(130% 90% at 50% -10%, rgba(0, 0, 0, 0.04), transparent 55%),
+    radial-gradient(130% 90% at 50% 110%, rgba(0, 0, 0, 0.04), transparent 55%);
+}
+
+/* --- LEFT PANEL: Order of Events --- */
+.left-panel {
+  width: 25%;
+  background-color: transparent;
+  padding: 30px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.panel-title {
+  font-family: var(--font-playfair), serif;
+  font-style: italic;
+  font-size: 1.35rem;
+  color: #222;
+  margin-bottom: 25px;
+  text-align: center;
+}
+.timeline {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  bottom: 20px;
+  width: 1px;
+  background-color: #444;
+  transform: translateX(-50%);
+}
+.timeline-item {
+  position: relative;
+  width: 100%;
+  margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.68rem;
+  font-weight: 400;
+  color: #111;
+  text-transform: capitalize;
+}
+.timeline-item::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  width: 30px;
+  height: 1px;
+  background-color: #444;
+}
+.item-left { padding-right: 70px; }
+.item-left::after { right: 50%; }
+.item-right { padding-left: 70px; }
+.item-right::after { left: 50%; }
+
+/* Hover interaction */
+.timeline-item { cursor: pointer; }
+.timeline-item > div:last-child {
+  transition: transform 0.3s ease, letter-spacing 0.3s ease, color 0.3s ease;
+}
+.timeline-item::after {
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+.timeline-item:hover .icon-placeholder {
+  transform: scale(1.35) translateY(-3px);
+  opacity: 1;
+}
+.timeline-item:hover > div:last-child {
+  transform: translateY(3px);
+  letter-spacing: 0.4px;
+  color: #000;
+}
+.timeline-item:hover::after {
+  width: 42px;
+  background-color: #000;
+}
+
+.icon-placeholder {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.8;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+}
+.ico-entrance::before { content: "🏰"; font-size: 16px; }
+.ico-ceremony::before { content: "💍"; font-size: 16px; }
+.ico-drinks::before   { content: "🥂"; font-size: 16px; }
+.ico-dinner::before   { content: "🍽️"; font-size: 16px; }
+.ico-cake::before     { content: "🎂"; font-size: 16px; }
+.ico-dance::before    { content: "💃"; font-size: 16px; }
+.ico-photos::before   { content: "📷"; font-size: 16px; }
+.ico-sendoff::before  { content: "🚗"; font-size: 16px; }
+
+/* --- CENTER PANEL: Main Invitation --- */
+.center-panel {
+  width: 50%;
+  padding: 50px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: transparent;
+}
+.names-container { margin-bottom: 30px; }
+.name-serif {
+  font-family: var(--font-cinzel), serif;
+  font-size: 2.6rem;
+  letter-spacing: 5px;
+  color: #111;
+  font-weight: 400;
+  line-height: 1.1;
+}
+.name-script {
+  font-family: var(--font-pinyon), cursive;
+  font-size: 2.8rem;
+  color: #888;
+  margin-top: -12px;
+  margin-bottom: 5px;
+}
+.plus-sign {
+  font-family: var(--font-playfair), serif;
+  font-size: 1.8rem;
+  font-style: italic;
+  color: #444;
+  margin: 15px 0;
+}
+.invite-text {
+  font-family: var(--font-cinzel), serif;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 30px;
+}
+.date-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 85%;
+  border-top: 1px solid #444;
+  border-bottom: 1px solid #444;
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+.date-side {
+  font-family: var(--font-cinzel), serif;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  width: 35%;
+  text-transform: uppercase;
+}
+.date-center {
+  font-family: var(--font-playfair), serif;
+  font-size: 1.9rem;
+  width: 30%;
+  border-left: 1px solid #444;
+  border-right: 1px solid #444;
+  line-height: 1;
+}
+.time-text {
+  font-family: var(--font-playfair), serif;
+  font-style: italic;
+  font-size: 0.7rem;
+  color: #555;
+  margin-bottom: 35px;
+  letter-spacing: 1px;
+}
+.location-title {
+  font-family: var(--font-playfair), serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #222;
+  margin-bottom: 4px;
+}
+.location-sub {
+  font-family: var(--font-playfair), serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #444;
+  margin-bottom: 35px;
+}
+.reception-text {
+  font-family: var(--font-pinyon), cursive;
+  font-size: 2.2rem;
+  color: #333;
+}
+
+/* --- RIGHT PANEL: RSVP, Details & Gifts --- */
+.right-panel {
+  width: 25%;
+  background-color: transparent;
+  padding: 40px 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.right-section { margin-bottom: 40px; width: 100%; }
+.section-title {
+  font-family: var(--font-cinzel), serif;
+  font-size: 1.25rem;
+  letter-spacing: 3px;
+  color: #111;
+  margin-bottom: 12px;
+}
+.section-body {
+  font-family: var(--font-playfair), serif;
+  font-size: 0.7rem;
+  line-height: 1.6;
+  color: #444;
+}
+.qr-code {
+  width: 65px;
+  height: 65px;
+  margin: 0 auto 15px auto;
+  background:
+    linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000),
+    linear-gradient(45deg, #000 25%, #fff 25%, #fff 75%, #000 75%, #000);
+  background-size: 10px 10px;
+  background-position: 0 0, 5px 5px;
+  border: 4px solid #fff;
+  outline: 1px solid #000;
+}
+.website-link {
+  display: block;
+  margin-top: 5px;
+  color: #111;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* --- Responsive: stack the trifold on small screens --- */
+@media (max-width: 1040px) {
+  .invitation-container { flex-direction: column; max-width: 560px; min-height: 0; }
+  .left-panel, .center-panel, .right-panel { width: 100%; }
+  .center-panel { padding: 45px 30px; }
+}
+`;
 
 export default function WeddingPage() {
-  const target = useMemo(() => new Date("2026-07-11T12:30:00Z"), []);
-  const countdown = useCountdown(target);
-  const [activeDay, setActiveDay] = useState<"jul-11" | "jul-12" | null>(null);
-
-  const jul11Ref = useRef<HTMLDivElement>(null);
-  const jul12Ref = useRef<HTMLDivElement>(null);
-
-  const scrollToSection = (id: "jul-11" | "jul-12") => {
-    setActiveDay(id);
-    const ref = id === "jul-11" ? jul11Ref : jul12Ref;
-    if (ref.current) {
-      const y = ref.current.getBoundingClientRect().top + window.scrollY - 24;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }
-  };
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) setActiveDay(entry.target.id as "jul-11" | "jul-12");
-        }
-      },
-      { threshold: 0.4 }
-    );
-    if (jul11Ref.current) observer.observe(jul11Ref.current);
-    if (jul12Ref.current) observer.observe(jul12Ref.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div className="min-h-screen font-body pb-14" style={{ background: C.ivory }}>
-      <div className="max-w-lg mx-auto px-5">
+    <div className="wedding-page">
+      <style dangerouslySetInnerHTML={{ __html: css }} />
 
-        {/* ── Hero card ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65 }}
-          className="mt-8 bg-white px-8 py-12 text-center"
-          style={{ boxShadow: `0 6px 40px rgba(92,26,46,0.10), 0 1px 4px rgba(92,26,46,0.06)` }}
-        >
-          {/* Top ornament */}
-          <div className="flex items-center justify-center gap-2 mb-8">
-            <div className="h-px w-10" style={{ background: C.goldLight }} />
-            <span className="text-xs tracking-[0.5em]" style={{ color: C.gold }}>✿ ✿ ✿</span>
-            <div className="h-px w-10" style={{ background: C.goldLight }} />
+      <div className="invitation-container">
+        {/* LEFT PANEL */}
+        <div className="left-panel">
+          <h2 className="panel-title">Order of Events</h2>
+          <div className="timeline">
+            {TIMELINE.map((item) => (
+              <div key={item.label} className={`timeline-item ${item.side}`}>
+                <div className={`icon-placeholder ${item.ico}`} />
+                <div>{item.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CENTER PANEL */}
+        <div className="center-panel">
+          <div className="names-container">
+            <div className="name-serif">SOPHIA</div>
+            <div className="name-script">Thompson</div>
+            <div className="plus-sign">+</div>
+            <div className="name-serif">JOSEPH</div>
+            <div className="name-script">Hilton</div>
           </div>
 
-          <p className="text-[8px] uppercase tracking-[0.5em] mb-8" style={{ color: C.muted }}>
-            Together with their families
-          </p>
-
-          <h1
-            className="text-[3rem] sm:text-[3.6rem] font-bold uppercase tracking-[0.08em] leading-none"
-            style={{ color: C.wine }}
-          >
-            Joan
-          </h1>
-          <p className="text-xl my-3 tracking-[0.4em] font-light" style={{ color: C.gold }}>
-            &
-          </p>
-          <h1
-            className="text-[3rem] sm:text-[3.6rem] font-bold uppercase tracking-[0.08em] leading-none"
-            style={{ color: C.wine }}
-          >
-            Angeline
-          </h1>
-
-          {/* Divider */}
-          <div className="flex items-center gap-4 my-8">
-            <div className="flex-1 h-px" style={{ background: C.goldLight }} />
-            <span className="text-[9px] tracking-[0.5em]" style={{ color: C.gold }}>✦ ✦ ✦</span>
-            <div className="flex-1 h-px" style={{ background: C.goldLight }} />
+          <div className="invite-text">
+            JOYFULLY INVITE YOU TO CELEBRATE
+            <br />
+            THEIR WEDDING
           </div>
 
-          <p className="text-[8px] uppercase tracking-[0.45em]" style={{ color: C.muted }}>
-            Wedding Celebrations
-          </p>
-          <p
-            className="text-[13px] font-semibold tracking-[0.22em] uppercase mt-1.5"
-            style={{ color: C.rose }}
-          >
-            July 11 – 12, 2026
-          </p>
-
-          {/* Countdown */}
-          <div className="mt-9">
-            <p className="text-[7px] uppercase tracking-[0.45em] mb-5" style={{ color: C.goldLight }}>
-              Counting down to the celebration
-            </p>
-            <div className="flex justify-center gap-5 sm:gap-8">
-              {[
-                { v: countdown.days,    l: "Days" },
-                { v: countdown.hours,   l: "Hrs"  },
-                { v: countdown.minutes, l: "Mins" },
-                { v: countdown.seconds, l: "Secs" },
-              ].map(({ v, l }) => (
-                <div key={l} className="flex flex-col items-center gap-1.5">
-                  <span
-                    className="text-[2.2rem] font-bold tabular-nums leading-none tracking-tight"
-                    style={{ color: C.wine }}
-                  >
-                    {String(v).padStart(2, "0")}
-                  </span>
-                  <span className="text-[7px] uppercase tracking-[0.35em]" style={{ color: C.gold }}>
-                    {l}
-                  </span>
-                </div>
-              ))}
-            </div>
+          <div className="date-row">
+            <div className="date-side">Saturday</div>
+            <div className="date-center">28</div>
+            <div className="date-side">December</div>
           </div>
 
-          {/* Day nav */}
-          <div className="mt-9 flex gap-2.5 justify-center">
-            {(["jul-11", "jul-12"] as const).map((id) => {
-              const isActive = activeDay === id;
-              return (
-                <button
-                  key={id}
-                  onClick={() => scrollToSection(id)}
-                  className="px-5 py-2 text-[9px] font-bold uppercase tracking-[0.2em] border transition-all duration-200 active:scale-95"
-                  style={
-                    isActive
-                      ? { background: C.wine, color: "#fff", borderColor: C.wine }
-                      : { background: "#fff", color: C.rose, borderColor: C.goldLight }
-                  }
-                >
-                  {id === "jul-11" ? "July 11" : "July 12"}
-                </button>
-              );
-            })}
-          </div>
-        </motion.div>
+          <div className="time-text">20XX AT 5 PM</div>
 
-        {/* ── Events card ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.18, duration: 0.65 }}
-          className="mt-4 mb-8 bg-white px-6 pt-9 pb-10"
-          style={{ boxShadow: `0 6px 40px rgba(92,26,46,0.10), 0 1px 4px rgba(92,26,46,0.06)` }}
-        >
-          {/* Section title */}
-          <div className="text-center mb-8">
-            <p className="text-[8px] uppercase tracking-[0.5em] font-semibold" style={{ color: C.gold }}>
-              Weekend Events
+          <div className="location-title">The Express Hotel</div>
+          <div className="location-sub">New York, NY</div>
+
+          <div className="reception-text">reception to follow</div>
+        </div>
+
+        {/* RIGHT PANEL */}
+        <div className="right-panel">
+          <div className="right-section">
+            <h2 className="section-title">RSVP</h2>
+            <div className="qr-code" />
+            <p className="section-body">
+              Kindly let us know if you will be able to join us on our special day. Visit our
+              wedding website <span className="website-link">Francescajoseph.com</span> or scan QR
+              to confirm your attendance
             </p>
           </div>
 
-          {EVENTS.map((day, dayIdx) => (
-            <div key={day.dayId} id={day.dayId} ref={dayIdx === 0 ? jul11Ref : jul12Ref}>
-              {dayIdx > 0 && (
-                <div className="flex items-center gap-4 my-2">
-                  <span className="text-[8px] tracking-[0.5em]" style={{ color: C.goldLight }}>✦</span>
-                </div>
-              )}
-
-              {/* Day header — centered over spine */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: dayIdx * 0.15 + 0.2 }}
-                className="flex items-center gap-3 mb-6"
-              >
-                <div className="flex-1 h-px" style={{ background: C.goldLight }} />
-                <p
-                  className="text-[9px] uppercase tracking-[0.3em] font-bold whitespace-nowrap"
-                  style={{ color: C.wine }}
-                >
-                  {day.label}
-                </p>
-                <div className="flex-1 h-px" style={{ background: C.goldLight }} />
-              </motion.div>
-
-              {/* Timeline items */}
-              {day.items.map((item, i) => (
-                <TimelineItem
-                  key={item.id}
-                  item={item}
-                  index={i + dayIdx * 4}
-                  isFirst={i === 0}
-                  isLast={i === day.items.length - 1}
-                />
-              ))}
-            </div>
-          ))}
-
-          {/* Card footer */}
-          <div className="mt-8 pt-6 text-center" style={{ borderTop: `1px solid ${C.goldLight}` }}>
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <div className="h-px w-8" style={{ background: C.goldLight }} />
-              <span className="text-xs" style={{ color: C.gold }}>✿</span>
-              <div className="h-px w-8" style={{ background: C.goldLight }} />
-            </div>
-            <p className="text-[8px] uppercase tracking-[0.45em]" style={{ color: C.muted }}>
-              Joan Louji + Angeline Vidhya
+          <div className="right-section">
+            <h2 className="section-title">DETAILS</h2>
+            <p className="section-body">
+              For our out-of-town guests, we&apos;ve reserved a block of rooms to ensure your stay
+              is as comfortable as our celebration is memorable. Visit our wedding website for
+              additional details
             </p>
           </div>
-        </motion.div>
 
+          <div className="right-section">
+            <h2 className="section-title">GIFTS</h2>
+            <p className="section-body">
+              Your presence is the most precious gift we could ask for. If you&apos;d prefer, a
+              contribution to our honeymoon fund would be a lovely way to help us create
+              unforgettable memories
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
