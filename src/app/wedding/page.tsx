@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import WeddingPage from "./wedding-page";
 
 export const metadata: Metadata = {
-  title: "Joan Louji & Angeline Vidhya — Wedding Celebrations",
+  title: "Joan Louji & Angelene Vidhya — Holy Matrimony",
   description:
-    "Join us as we celebrate the wedding of Joan Louji and Angeline Vidhya on July 11–12, 2026.",
+    "Together with their families, we cordially invite you to celebrate the Holy Matrimony of Joan Louji and Angelene Vidhya on Sunday, 12 July 2026.",
 };
 
 export default function Page() {

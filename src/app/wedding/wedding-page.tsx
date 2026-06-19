@@ -1,20 +1,68 @@
+"use client";
+
 // Faithful port of the trifold wedding-invitation design.
 // Fonts are loaded as CSS variables in ./layout.tsx
 // (--font-cinzel, --font-playfair, --font-pinyon, --font-montserrat).
 
+import { useEffect, useRef, useState } from "react";
+
+const MAPS = {
+  church: "https://maps.app.goo.gl/TRg1nbJ4DpmHxWk96",
+  mahal: "https://maps.app.goo.gl/oXoqtKZHTcfq8GfN6",
+  reception: "https://maps.app.goo.gl/iGvpt9eaYKT3HfiN9",
+};
+
 const TIMELINE = [
-  { side: "item-right", ico: "ico-entrance", label: "3pm Entrance" },
-  { side: "item-left", ico: "ico-ceremony", label: "4pm Ceremony" },
-  { side: "item-right", ico: "ico-drinks", label: "5pm Drinks" },
-  { side: "item-left", ico: "ico-dinner", label: "6pm Dinner" },
-  { side: "item-right", ico: "ico-cake", label: "7pm Cake Cutting" },
-  { side: "item-left", ico: "ico-dance", label: "8pm Dance" },
-  { side: "item-right", ico: "ico-photos", label: "9pm Photos" },
-  { side: "item-left", ico: "ico-sendoff", label: "10pm Send-off" },
+  {
+    side: "item-right", ico: "ico-matrimony", title: "Holy Matrimony",
+    time: "10:30 – 11:45 AM", venue: "St. Antony's Church", mapsUrl: MAPS.church,
+  },
+  {
+    side: "item-left", ico: "ico-feast", title: "Feast",
+    time: "12:00 – 2:00 PM", venue: "Gurusamy Kovil Mahal", mapsUrl: MAPS.mahal,
+  },
+  {
+    side: "item-right", ico: "ico-reception", title: "Reception",
+    time: "6:00 – 9:00 PM", venue: "SK Thanga Rathinam Mahal", mapsUrl: MAPS.reception,
+  },
+];
+
+const VENUES = [
+  {
+    name: "St. Antony's Church",
+    addr: "Pavoorchatram, Tamil Nadu 627808",
+    mapsUrl: MAPS.church,
+  },
+  {
+    name: "Gurusamy Kovil Thirumana Mahal",
+    addr: "Keezhapavur, Tamil Nadu 627806",
+    mapsUrl: MAPS.mahal,
+  },
+  {
+    name: "SK Thanga Rathinam Thirumana Mahal",
+    addr: "Surandai Road, Keezhapavur, Tamil Nadu 627806",
+    mapsUrl: MAPS.reception,
+  },
 ];
 
 const css = `
 html, body { background-color: #ffffff !important; }
+
+/* Scroll-reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
 
 .wedding-page {
   background-color: #ffffff;
@@ -150,14 +198,9 @@ html, body { background-color: #ffffff !important; }
   opacity: 0.8;
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
 }
-.ico-entrance::before { content: "🏰"; font-size: 16px; }
-.ico-ceremony::before { content: "💍"; font-size: 16px; }
-.ico-drinks::before   { content: "🥂"; font-size: 16px; }
-.ico-dinner::before   { content: "🍽️"; font-size: 16px; }
-.ico-cake::before     { content: "🎂"; font-size: 16px; }
-.ico-dance::before    { content: "💃"; font-size: 16px; }
-.ico-photos::before   { content: "📷"; font-size: 16px; }
-.ico-sendoff::before  { content: "🚗"; font-size: 16px; }
+.ico-matrimony::before { content: "💒"; font-size: 18px; }
+.ico-feast::before     { content: "🍽️"; font-size: 18px; }
+.ico-reception::before { content: "🥂"; font-size: 18px; }
 
 /* --- CENTER PANEL: Main Invitation --- */
 .center-panel {
@@ -173,15 +216,15 @@ html, body { background-color: #ffffff !important; }
 .names-container { margin-bottom: 30px; }
 .name-serif {
   font-family: var(--font-cinzel), serif;
-  font-size: 2.6rem;
-  letter-spacing: 5px;
+  font-size: clamp(1.9rem, 7.5vw, 2.6rem);
+  letter-spacing: clamp(2px, 1vw, 5px);
   color: #111;
   font-weight: 400;
   line-height: 1.1;
 }
 .name-script {
   font-family: var(--font-pinyon), cursive;
-  font-size: 2.8rem;
+  font-size: clamp(2rem, 8.5vw, 2.8rem);
   color: #888;
   margin-top: -12px;
   margin-bottom: 5px;
@@ -250,7 +293,7 @@ html, body { background-color: #ffffff !important; }
 }
 .reception-text {
   font-family: var(--font-pinyon), cursive;
-  font-size: 2.2rem;
+  font-size: clamp(1.7rem, 7.5vw, 2.2rem);
   color: #333;
 }
 
@@ -290,6 +333,12 @@ html, body { background-color: #ffffff !important; }
   border: 4px solid #fff;
   outline: 1px solid #000;
 }
+.qr-img {
+  width: 84px;
+  height: 84px;
+  display: block;
+  margin: 0 auto 14px auto;
+}
 .website-link {
   display: block;
   margin-top: 5px;
@@ -298,91 +347,262 @@ html, body { background-color: #ffffff !important; }
   font-weight: bold;
 }
 
+/* Timeline item text */
+.timeline-item { text-decoration: none; color: #111; }
+.tl-title {
+  font-family: var(--font-cinzel), serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.5px;
+  color: #111;
+  margin-top: 3px;
+  text-transform: uppercase;
+}
+.tl-time {
+  font-family: var(--font-playfair), serif;
+  font-style: italic;
+  font-size: 0.66rem;
+  color: #555;
+  margin-top: 2px;
+}
+.tl-venue {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 0.58rem;
+  color: #999;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+/* Center: verse + parents + blessing */
+.verse {
+  font-family: var(--font-playfair), serif;
+  font-style: italic;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: #555;
+  max-width: 360px;
+  margin-bottom: 6px;
+}
+.verse-ref {
+  font-family: var(--font-cinzel), serif;
+  font-size: 0.58rem;
+  letter-spacing: 2px;
+  color: #999;
+  margin-bottom: 28px;
+  text-transform: uppercase;
+}
+.parents {
+  font-family: var(--font-playfair), serif;
+  font-style: italic;
+  font-size: 0.72rem;
+  color: #777;
+  line-height: 1.5;
+  margin-top: 8px;
+  max-width: 320px;
+}
+.blessing {
+  font-family: var(--font-pinyon), cursive;
+  font-size: clamp(1.5rem, 6.5vw, 2rem);
+  color: #333;
+  margin-top: 10px;
+}
+
+/* Right: venues list */
+.venue-item {
+  display: block;
+  text-decoration: none;
+  margin-bottom: 16px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.venue-item:hover { transform: translateY(-2px); opacity: 0.65; }
+.venue-name {
+  font-family: var(--font-playfair), serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #111;
+}
+.venue-addr {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 0.62rem;
+  color: #888;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
 /* --- Responsive: stack the trifold on small screens --- */
 @media (max-width: 1040px) {
   .invitation-container { flex-direction: column; max-width: 560px; min-height: 0; }
   .left-panel, .center-panel, .right-panel { width: 100%; }
-  .center-panel { padding: 45px 30px; }
+  .center-panel { padding: 45px 30px; order: -1; }   /* names first when stacked */
+  /* vertical fold creases don't apply to a stacked layout */
+  .invitation-container::before { display: none; }
+}
+
+@media (max-width: 480px) {
+  .wedding-page { padding: 12px; }
+  .invitation-container { border-radius: 6px; }
+  .left-panel  { padding: 28px 12px; }
+  .right-panel { padding: 30px 18px; }
+  .center-panel { padding: 36px 20px; }
+  .item-left  { padding-right: 52px; }
+  .item-right { padding-left: 52px; }
+  .timeline-item::after { width: 24px; }
+  .invite-text { font-size: 0.7rem; }
+  .right-section { margin-bottom: 32px; }
 }
 `;
 
+/** stagger helper: sets the reveal delay as a CSS custom property */
+const revealDelay = (delayMs: number) =>
+  ({ "--reveal-delay": `${delayMs}ms` } as React.CSSProperties);
+
 export default function WeddingPage() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [qrSrc, setQrSrc] = useState("");
+
+  useEffect(() => {
+    const url = `${window.location.origin}${window.location.pathname}`;
+    setQrSrc(
+      `https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=0&data=${encodeURIComponent(url)}`
+    );
+  }, []);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const targets = Array.from(root.querySelectorAll<HTMLElement>(".reveal"));
+
+    // If the browser can't observe, just show everything.
+    if (!("IntersectionObserver" in window)) {
+      targets.forEach((el) => el.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.18, rootMargin: "0px 0px -8% 0px" }
+    );
+
+    targets.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="wedding-page">
+    <div className="wedding-page" ref={rootRef}>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
       <div className="invitation-container">
         {/* LEFT PANEL */}
         <div className="left-panel">
-          <h2 className="panel-title">Order of Events</h2>
+          <h2 className="panel-title reveal" style={revealDelay(0)}>
+            Order of Events
+          </h2>
           <div className="timeline">
-            {TIMELINE.map((item) => (
-              <div key={item.label} className={`timeline-item ${item.side}`}>
+            {TIMELINE.map((item, i) => (
+              <a
+                key={item.title}
+                href={item.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`timeline-item ${item.side} reveal`}
+                style={{ "--reveal-delay": `${i * 120}ms` } as React.CSSProperties}
+              >
                 <div className={`icon-placeholder ${item.ico}`} />
-                <div>{item.label}</div>
-              </div>
+                <div className="tl-title">{item.title}</div>
+                <div className="tl-time">{item.time}</div>
+                <div className="tl-venue">{item.venue}</div>
+              </a>
             ))}
           </div>
         </div>
 
         {/* CENTER PANEL */}
         <div className="center-panel">
-          <div className="names-container">
-            <div className="name-serif">SOPHIA</div>
-            <div className="name-script">Thompson</div>
-            <div className="plus-sign">+</div>
-            <div className="name-serif">JOSEPH</div>
-            <div className="name-script">Hilton</div>
-          </div>
+          <p className="verse reveal" style={revealDelay(0)}>
+            “Love bears all things, believes all things, hopes all things, endures all things”
+          </p>
+          <p className="verse-ref reveal" style={revealDelay(60)}>
+            1 Corinthians 13:7
+          </p>
 
-          <div className="invite-text">
-            JOYFULLY INVITE YOU TO CELEBRATE
+          <div className="invite-text reveal" style={revealDelay(120)}>
+            TOGETHER WITH THEIR FAMILIES,
             <br />
-            THEIR WEDDING
+            WE CORDIALLY INVITE YOU TO CELEBRATE
+            <br />
+            THE HOLY MATRIMONY OF
           </div>
 
-          <div className="date-row">
-            <div className="date-side">Saturday</div>
-            <div className="date-center">28</div>
-            <div className="date-side">December</div>
+          <div className="names-container reveal" style={revealDelay(180)}>
+            <div className="name-serif">JOAN</div>
+            <div className="name-script">Louji</div>
+            <div className="parents">
+              S/O Mr. L. Salette Arulanantham &amp; Mrs. K. Ponrani
+            </div>
+
+            <div className="plus-sign">+</div>
+
+            <div className="name-serif">ANGELENE</div>
+            <div className="name-script">Vidhya</div>
+            <div className="parents">
+              D/O Mr. K. John Bright &amp; Mrs. K. Santhi
+            </div>
           </div>
 
-          <div className="time-text">20XX AT 5 PM</div>
+          <div className="date-row reveal" style={revealDelay(260)}>
+            <div className="date-side">Sunday</div>
+            <div className="date-center">12</div>
+            <div className="date-side">July</div>
+          </div>
 
-          <div className="location-title">The Express Hotel</div>
-          <div className="location-sub">New York, NY</div>
+          <div className="time-text reveal" style={revealDelay(320)}>
+            IN THE YEAR 2026
+          </div>
 
-          <div className="reception-text">reception to follow</div>
+          <div className="blessing reveal" style={revealDelay(400)}>
+            by the grace of God
+          </div>
         </div>
 
         {/* RIGHT PANEL */}
         <div className="right-panel">
-          <div className="right-section">
-            <h2 className="section-title">RSVP</h2>
-            <div className="qr-code" />
-            <p className="section-body">
-              Kindly let us know if you will be able to join us on our special day. Visit our
-              wedding website <span className="website-link">Francescajoseph.com</span> or scan QR
-              to confirm your attendance
-            </p>
+          <div className="right-section reveal" style={revealDelay(0)}>
+            <h2 className="section-title">DIRECTIONS</h2>
+            {qrSrc ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={qrSrc} alt="Scan for directions to all the venues" className="qr-img" />
+            ) : (
+              <div className="qr-code" />
+            )}
+            <p className="section-body">Scan for directions to all the venues</p>
           </div>
 
-          <div className="right-section">
-            <h2 className="section-title">DETAILS</h2>
-            <p className="section-body">
-              For our out-of-town guests, we&apos;ve reserved a block of rooms to ensure your stay
-              is as comfortable as our celebration is memorable. Visit our wedding website for
-              additional details
-            </p>
+          <div className="right-section reveal" style={revealDelay(120)}>
+            <h2 className="section-title">VENUES</h2>
+            {VENUES.map((v) => (
+              <a
+                key={v.name}
+                href={v.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="venue-item"
+              >
+                <div className="venue-name">{v.name}</div>
+                <div className="venue-addr">{v.addr}</div>
+              </a>
+            ))}
           </div>
 
-          <div className="right-section">
-            <h2 className="section-title">GIFTS</h2>
-            <p className="section-body">
-              Your presence is the most precious gift we could ask for. If you&apos;d prefer, a
-              contribution to our honeymoon fund would be a lovely way to help us create
-              unforgettable memories
-            </p>
+          <div className="right-section reveal" style={revealDelay(240)}>
+            <h2 className="section-title">BLESSINGS</h2>
+            <p className="section-body">With joyful hearts, we await your blessings</p>
           </div>
         </div>
       </div>
