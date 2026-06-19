@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const l=require\\('/Users/joanlouji/Documents/joan/repositories/portfolio/node_modules/lucide-react'\\); ['Gem','Church','UtensilsCrossed','Sparkles'].forEach\\(n=>console.log\\(n, typeof l[n]==='function'?'✓':'✗ MISSING'\\)\\)\")"
+    ]
+  }
+}
