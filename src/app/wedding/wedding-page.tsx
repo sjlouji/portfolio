@@ -597,10 +597,14 @@ export default function WeddingPage() {
   const hasUrgent = notifs.some((n) => n.urgent);
 
   useEffect(() => {
-    const isDark = localStorage.getItem("wd-theme") === "dark";
-    document.documentElement.classList.toggle("wd-dark", isDark);
-    document.documentElement.classList.toggle("dark", isDark);
-    setDark(isDark);
+    const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+    const hour = new Date().getHours();
+    const isNight = hour >= 18 || hour < 6;
+    const initialDark = prefersDark || isNight;
+
+    document.documentElement.classList.toggle("wd-dark", initialDark);
+    document.documentElement.classList.toggle("dark", initialDark);
+    setDark(initialDark);
   }, []);
 
   const toggleTheme = () => {
@@ -618,7 +622,6 @@ export default function WeddingPage() {
     if (start && !reduce) start.call(document, apply);
     else apply();
 
-    localStorage.setItem("wd-theme", next ? "dark" : "light");
     setDark(next);
   };
 
