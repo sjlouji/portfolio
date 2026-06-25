@@ -1,4 +1,11 @@
-import { Cinzel, Playfair_Display, Pinyon_Script, Montserrat } from "next/font/google";
+import { Cinzel, Playfair_Display, Pinyon_Script, Montserrat, Caveat } from "next/font/google";
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-caveat",
+  display: "swap",
+});
 
 const cinzel = Cinzel({
   subsets: ["latin"],
@@ -35,7 +42,7 @@ export default function WeddingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`${cinzel.variable} ${playfair.variable} ${pinyon.variable} ${montserrat.variable}`}>
+    <div className={`${cinzel.variable} ${playfair.variable} ${pinyon.variable} ${montserrat.variable} ${caveat.variable}`}>
       {children}
     </div>
   );

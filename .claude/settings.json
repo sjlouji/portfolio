@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node -e \"const l=require\\('/Users/joanlouji/Documents/joan/repositories/portfolio/node_modules/lucide-react'\\); ['Gem','Church','UtensilsCrossed','Sparkles'].forEach\\(n=>console.log\\(n, typeof l[n]==='function'?'✓':'✗ MISSING'\\)\\)\")"
+      "Bash(node -e \"const l=require\\('/Users/joanlouji/Documents/joan/repositories/portfolio/node_modules/lucide-react'\\); ['Gem','Church','UtensilsCrossed','Sparkles'].forEach\\(n=>console.log\\(n, typeof l[n]==='function'?'✓':'✗ MISSING'\\)\\)\")",
+      "Read(//Users/joanlouji/.ssh/**)",
+      "Bash(ssh-add -l)",
+      "Bash(curl -s -o /dev/null -w \"wedding route: %{http_code}\\\\n\" http://localhost:9002/wedding)",
+      "Bash(cd /Users/joanlouji/Documents/joan/repositories/portfolio; echo \"=== PDFs in repo ===\"; find . -path ./node_modules -prune -o -iname \"*.pdf\" -print 2>/dev/null | head; echo \"=== recent PDFs in Downloads ===\"; ls -lt ~/Downloads/*.pdf 2>/dev/null | head -5; echo \"=== recent PDFs on Desktop ===\"; ls -lt ~/Desktop/*.pdf 2>/dev/null | head -5)",
+      "Read(//Users/joanlouji/Downloads/**)",
+      "Read(//Users/joanlouji/Desktop/**)",
+      "Bash(curl -s -o /dev/null -w \"route: %{http_code}\\\\n\" http://localhost:9002/wedding)"
     ]
   }
 }
