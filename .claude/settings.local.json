@@ -6,7 +6,9 @@
       "Bash(npx tsc *)",
       "Bash(npm run *)",
       "Bash(echo \"PID: $!\")",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:9002/wedding)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:9002/wedding)",
+      "Bash(curl -s \"http://localhost:9002/wedding\")",
+      "Bash(curl -s \"http://localhost:9002/_next/static/chunks/src_assets_styles_globals_986887c1.css\")"
     ],
     "additionalDirectories": [
       "/Users/joanlouji/Documents/joan/repositories/portfolio/src/app"
