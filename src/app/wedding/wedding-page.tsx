@@ -8,6 +8,7 @@ import { useEffect, useState, type CSSProperties } from "react";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import { Crackers } from "@/components/ui/crackers";
+import { ProjectBanner } from "@/components/ui/project-banner";
 
 const EVENTS = [
   {
@@ -259,6 +260,27 @@ html.wd-dark, html.wd-dark body { background-color: #060608 !important; color-sc
 }
 /* Aurora sits behind everything */
 .aurora-bg { position: fixed; inset: 0; z-index: -1; }
+
+/* next-event banner — sits above the footer */
+.next-banner-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 8px 16px 0;
+}
+.next-banner {
+  max-width: 92vw;
+  background: var(--bg) !important;
+  color: var(--ink) !important;
+  border-color: var(--line) !important;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.10) !important;
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 0.66rem !important;
+  letter-spacing: 0.04em;
+  animation: notif-in 0.4s ease;
+}
+.next-banner a { color: var(--ink); }
+.next-banner .nb-ico { display: inline-flex; color: var(--rose); }
+.next-banner .nb-ico svg { width: 13px; height: 13px; }
 /* guarantee the aurora goes dark with the wedding theme (inline = never stale-cached) */
 html.wd-dark .aurora-bg { background-color: #060608 !important; }
 html.wd-dark .aurora-bg > div > div { opacity: 0.12 !important; filter: none !important; }
@@ -616,6 +638,8 @@ export default function WeddingPage() {
   const notifs = now ? buildNotifs(now) : [];
   const hasUrgent = notifs.some((n) => n.urgent);
   const isCelebrationDay = now > 0 && CELEBRATION_DAYS.has(istDayStr(now));
+  // The soonest event that hasn't concluded (happening now / upcoming).
+  const nextUp = notifs.find((n) => !n.id.endsWith("-completed"));
 
   useEffect(() => {
     // Always load in the light theme; dark is opt-in via the toggle for this session.
@@ -778,7 +802,18 @@ export default function WeddingPage() {
           </div>
         </div>
       </div>
-
+{/* Bottom banner — surfaces the next event that's coming up */}
+      {nextUp && (
+        <div className="next-banner-wrap">
+          <ProjectBanner
+            className="next-banner"
+            variant="default"
+            icon={<span className="nb-ico">{ICONS.heartFilled}</span>}
+            label={nextUp.title}
+            callToAction={{ label: "Get Directions", href: nextUp.mapsUrl }}
+          />
+        </div>
+      )}
       {/* FOOTER */}
       <footer className="foot">
         <BlurFade inView delay={0.1}>
