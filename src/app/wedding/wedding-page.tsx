@@ -110,6 +110,29 @@ const ICONS: Record<string, React.ReactNode> = {
 
 const fade = (ms: number): CSSProperties => ({ animationDelay: `${ms}ms` });
 
+// Wedding day — 12 July 2026, 10:30 AM IST
+const TARGET = new Date("2026-07-12T10:30:00+05:30").getTime();
+
+function useCountdown(targetMs: number) {
+  const [t, setT] = useState({ d: 0, h: 0, m: 0, s: 0 });
+  useEffect(() => {
+    const tick = () => {
+      const diff = targetMs - Date.now();
+      if (diff <= 0) return setT({ d: 0, h: 0, m: 0, s: 0 });
+      setT({
+        d: Math.floor(diff / 86_400_000),
+        h: Math.floor(diff / 3_600_000) % 24,
+        m: Math.floor(diff / 60_000) % 60,
+        s: Math.floor(diff / 1_000) % 60,
+      });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [targetMs]);
+  return t;
+}
+
 const css = `
 /* theme-aware page chrome */
 html, body { background-color: #ffffff !important; color-scheme: light !important; }
@@ -227,6 +250,25 @@ html.wd-dark .page {
 .when .d-side { font-family: var(--font-caveat), cursive; font-size: 1.5rem; line-height: 1; color: var(--ink); }
 .when .bar { width: 1px; height: 34px; background: var(--line); }
 .year { margin-top: 12px; font-family: var(--font-caveat), cursive; font-size: 1.3rem; letter-spacing: 0.08em; color: var(--muted); }
+.count-wrap { margin-top: 30px; }
+.count-cap { font-family: var(--font-caveat), cursive; font-size: 1.25rem; color: var(--muted); margin-bottom: 10px; }
+.count { display: flex; justify-content: center; gap: clamp(14px, 3vw, 24px); }
+.count-cell { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.count-num {
+  font-family: var(--font-caveat), cursive;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 2.6rem);
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.count-lab {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
 
 /* ── RIGHT: wedding timeline ── */
 .t-title { font-family: var(--font-caveat), cursive; font-size: clamp(2.2rem, 5vw, 3rem); line-height: 1; color: var(--ink); margin-bottom: 30px; }
@@ -368,6 +410,7 @@ html.wd-dark::view-transition-old(root) {
 
 export default function WeddingPage() {
   const [dark, setDark] = useState(false);
+  const cd = useCountdown(TARGET);
 
   useEffect(() => {
     const isDark = localStorage.getItem("wd-theme") === "dark";
@@ -435,6 +478,24 @@ export default function WeddingPage() {
           </BlurFade>
           <BlurFade delay={0.7} inView>
             <p className="year">2026</p>
+          </BlurFade>
+          <BlurFade delay={0.85} inView>
+            <div className="count-wrap">
+              <p className="count-cap">until we say "I do"</p>
+              <div className="count">
+                {[
+                  { v: cd.d, l: "Days" },
+                  { v: cd.h, l: "Hours" },
+                  { v: cd.m, l: "Minutes" },
+                  { v: cd.s, l: "Seconds" },
+                ].map((c) => (
+                  <div className="count-cell" key={c.l}>
+                    <span className="count-num">{String(c.v).padStart(2, "0")}</span>
+                    <span className="count-lab">{c.l}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </BlurFade>
         </div>
 
