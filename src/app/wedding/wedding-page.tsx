@@ -15,6 +15,8 @@ const EVENTS = [
     when: "11 June · 6:00 PM",
     venue: "Gurusamy Kovil Thirumana Mahal, Keezhapavur",
     mapsUrl: "https://maps.app.goo.gl/oXoqtKZHTcfq8GfN6",
+    start: "2026-07-11T18:00:00+05:30",
+    end: "2026-07-11T21:00:00+05:30",
   },
   {
     icon: "church",
@@ -22,6 +24,8 @@ const EVENTS = [
     when: "12 July · 10:30 – 11:45 AM",
     venue: "St. Antony's Church, Pavoorchatram",
     mapsUrl: "https://maps.app.goo.gl/TRg1nbJ4DpmHxWk96",
+    start: "2026-07-12T10:30:00+05:30",
+    end: "2026-07-12T11:45:00+05:30",
   },
   {
     icon: "feast",
@@ -29,6 +33,8 @@ const EVENTS = [
     when: "12 July · 12:00 – 2:00 PM",
     venue: "Gurusamy Kovil Thirumana Mahal, Keezhapavur",
     mapsUrl: "https://maps.app.goo.gl/oXoqtKZHTcfq8GfN6",
+    start: "2026-07-12T12:00:00+05:30",
+    end: "2026-07-12T14:00:00+05:30",
   },
   {
     icon: "glass",
@@ -36,8 +42,73 @@ const EVENTS = [
     when: "12 July · 6:00 – 9:00 PM",
     venue: "SK Thanga Rathinam Thirumana Mahal, Keezhapavur",
     mapsUrl: "https://maps.app.goo.gl/iGvpt9eaYKT3HfiN9",
+    start: "2026-07-12T18:00:00+05:30",
+    end: "2026-07-12T21:00:00+05:30",
   },
 ];
+
+interface Notif { id: string; title: string; sub: string; urgent: boolean; mapsUrl: string }
+
+// Build stage-aware notifications from the current time vs each event (IST-anchored).
+function buildNotifs(now: number): Notif[] {
+  const HOUR = 3_600_000;
+  const istDay = (ts: number) =>
+    new Date(ts).toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
+  const out: Notif[] = [];
+  const completed: Notif[] = [];
+
+  const istMidnight = (ts: number) => {
+    const [year, month, day] = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
+      .format(ts)
+      .split("-");
+
+    return Date.parse(`${year}-${month}-${day}T00:00:00+05:30`);
+  };
+
+  for (const e of EVENTS) {
+    const start = Date.parse(e.start);
+    const end = Date.parse(e.end);
+    if (now > end) {
+      completed.push({
+        id: `${e.name}-completed`,
+        title: `${e.name} has concluded`,
+        sub: `${e.when} · a beautiful moment in our story`,
+        urgent: false,
+        mapsUrl: e.mapsUrl,
+      });
+      continue;
+    }
+
+    if (now >= start) {
+      out.push({ id: e.name, title: `${e.name} is happening now`, sub: "Tap for directions", urgent: true, mapsUrl: e.mapsUrl });
+      continue;
+    }
+
+    const ms = start - now;
+    if (ms <= 3 * HOUR) {
+      const h = Math.floor(ms / HOUR);
+      const m = Math.floor((ms / 60_000) % 60);
+      const inStr = h > 0 ? `${h}h ${m}m` : `${m}m`;
+      out.push({ id: e.name, title: `${e.name} is about to begin`, sub: `Starts in ${inStr} · tap for directions`, urgent: true, mapsUrl: e.mapsUrl });
+      continue;
+    }
+
+    if (istDay(now) === istDay(start)) {
+      out.push({ id: e.name, title: `${e.name} is today`, sub: `${e.when} · tap for directions`, urgent: false, mapsUrl: e.mapsUrl });
+    } else {
+      const today = istMidnight(now);
+      const eventDay = istMidnight(start);
+      const days = Math.round((eventDay - today) / 86_400_000);
+      out.push({ id: e.name, title: `${e.name} in ${days} day${days > 1 ? "s" : ""}`, sub: `${e.when} · tap for directions`, urgent: false, mapsUrl: e.mapsUrl });
+    }
+  }
+  return [...out, ...completed];
+}
 
 const svg = {
   fill: "none" as const,
@@ -106,9 +177,43 @@ const ICONS: Record<string, React.ReactNode> = {
       <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z" />
     </svg>
   ),
+  bell: (
+    <svg viewBox="0 0 24 24" {...svg}>
+      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+      <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+    </svg>
+  ),
+  arrowRight: (
+    <svg viewBox="0 0 24 24" {...svg} strokeWidth={2}>
+      <path d="M8 5l8 7-8 7" />
+    </svg>
+  ),
 };
 
 const fade = (ms: number): CSSProperties => ({ animationDelay: `${ms}ms` });
+
+// Wedding day — 12 July 2026, 10:30 AM IST
+const TARGET = new Date("2026-07-12T10:30:00+05:30").getTime();
+
+function useCountdown(targetMs: number) {
+  const [t, setT] = useState({ d: 0, h: 0, m: 0, s: 0 });
+  useEffect(() => {
+    const tick = () => {
+      const diff = targetMs - Date.now();
+      if (diff <= 0) return setT({ d: 0, h: 0, m: 0, s: 0 });
+      setT({
+        d: Math.floor(diff / 86_400_000),
+        h: Math.floor(diff / 3_600_000) % 24,
+        m: Math.floor(diff / 60_000) % 60,
+        s: Math.floor(diff / 1_000) % 60,
+      });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [targetMs]);
+  return t;
+}
 
 const css = `
 /* theme-aware page chrome */
@@ -177,12 +282,18 @@ html.wd-dark .page {
   background: var(--line);
 }
 
-/* theme toggle */
-.theme-btn {
+/* top-right actions: notifications + theme */
+.top-actions {
   position: fixed;
   top: 18px;
   right: 18px;
   z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.icon-btn {
+  position: relative;
   width: 42px;
   height: 42px;
   display: inline-flex;
@@ -196,8 +307,93 @@ html.wd-dark .page {
   -webkit-tap-highlight-color: transparent;
   transition: transform 0.3s ease, border-color 0.3s ease;
 }
-.theme-btn:hover { transform: rotate(18deg) scale(1.06); border-color: var(--ink); }
-.theme-btn svg { width: 19px; height: 19px; }
+.icon-btn:hover { border-color: var(--ink); }
+.icon-btn svg { width: 19px; height: 19px; }
+.icon-btn.theme:hover { transform: rotate(18deg) scale(1.06); }
+.icon-btn.bell:hover { transform: scale(1.08); }
+
+.notif-wrap { position: relative; display: inline-flex; }
+.notif-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--rose);
+  border: 2px solid var(--bg);
+}
+.notif-badge.urgent { animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.7; }
+}
+@media (prefers-reduced-motion: reduce) { .notif-badge.urgent { animation: none; } }
+
+.notif-scrim { position: fixed; inset: 0; z-index: 55; }
+.notif-panel {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  z-index: 60;
+  width: min(320px, 86vw);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.18);
+  padding: 8px;
+  transform-origin: top right;
+  animation: notif-in 0.2s ease;
+}
+@keyframes notif-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+.notif-head {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 0.56rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 8px 10px 10px;
+}
+.notif-empty {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-align: center;
+  padding: 14px 12px 20px;
+}
+.notif-item {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  text-decoration: none;
+  color: var(--ink);
+  padding: 11px 12px;
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
+}
+.notif-item:hover { background-color: var(--hover-bg); }
+.notif-ico { flex-shrink: 0; margin-top: 1px; color: var(--muted); }
+.notif-ico.urgent { color: var(--rose); }
+.notif-ico svg { width: 16px; height: 16px; }
+.notif-text { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.notif-arrow { display: inline-flex; flex-shrink: 0; align-items: center; color: var(--muted); }
+.notif-arrow svg { width: 16px; height: 16px; }
+.notif-item:hover .notif-arrow { color: var(--ink); }
+.notif-title {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 0.74rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.notif-sub {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 0.62rem;
+  color: var(--muted);
+  line-height: 1.3;
+}
 
 /* entrance */
 .fade {
@@ -227,6 +423,25 @@ html.wd-dark .page {
 .when .d-side { font-family: var(--font-caveat), cursive; font-size: 1.5rem; line-height: 1; color: var(--ink); }
 .when .bar { width: 1px; height: 34px; background: var(--line); }
 .year { margin-top: 12px; font-family: var(--font-caveat), cursive; font-size: 1.3rem; letter-spacing: 0.08em; color: var(--muted); }
+.count-wrap { margin-top: 30px; }
+.count-cap { font-family: var(--font-caveat), cursive; font-size: 1.25rem; color: var(--muted); margin-bottom: 10px; }
+.count { display: flex; justify-content: center; gap: clamp(14px, 3vw, 24px); }
+.count-cell { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.count-num {
+  font-family: var(--font-caveat), cursive;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 2.6rem);
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.count-lab {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
 
 /* ── RIGHT: wedding timeline ── */
 .t-title { font-family: var(--font-caveat), cursive; font-size: clamp(2.2rem, 5vw, 3rem); line-height: 1; color: var(--ink); margin-bottom: 30px; }
@@ -368,12 +583,28 @@ html.wd-dark::view-transition-old(root) {
 
 export default function WeddingPage() {
   const [dark, setDark] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [now, setNow] = useState(0); // 0 until mounted (avoids SSR/hydration mismatch)
+  const cd = useCountdown(TARGET);
 
   useEffect(() => {
-    const isDark = localStorage.getItem("wd-theme") === "dark";
-    document.documentElement.classList.toggle("wd-dark", isDark);
-    document.documentElement.classList.toggle("dark", isDark);
-    setDark(isDark);
+    setNow(Date.now());
+    const id = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+
+  const notifs = now ? buildNotifs(now) : [];
+  const hasUrgent = notifs.some((n) => n.urgent);
+
+  useEffect(() => {
+    const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+    const hour = new Date().getHours();
+    const isNight = hour >= 18 || hour < 6;
+    const initialDark = prefersDark || isNight;
+
+    document.documentElement.classList.toggle("wd-dark", initialDark);
+    document.documentElement.classList.toggle("dark", initialDark);
+    setDark(initialDark);
   }, []);
 
   const toggleTheme = () => {
@@ -391,7 +622,6 @@ export default function WeddingPage() {
     if (start && !reduce) start.call(document, apply);
     else apply();
 
-    localStorage.setItem("wd-theme", next ? "dark" : "light");
     setDark(next);
   };
 
@@ -401,14 +631,57 @@ export default function WeddingPage() {
 
       <AuroraBackground className="aurora-bg h-full w-full" />
 
-      <button
-        type="button"
-        className="theme-btn"
-        onClick={toggleTheme}
-        aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
-      >
-        {dark ? ICONS.sun : ICONS.moon}
-      </button>
+      <div className="top-actions">
+        <div className="notif-wrap">
+          <button
+            type="button"
+            className="icon-btn bell"
+            onClick={() => setNotifOpen((o) => !o)}
+            aria-label="Notifications"
+          >
+            {ICONS.bell}
+            {notifs.length > 0 && <span className={`notif-badge${hasUrgent ? " urgent" : ""}`} />}
+          </button>
+
+          {notifOpen && (
+            <>
+              <div className="notif-scrim" onClick={() => setNotifOpen(false)} />
+              <div className="notif-panel" role="menu">
+                <p className="notif-head">Notifications</p>
+                {notifs.length === 0 ? (
+                  <p className="notif-empty">No upcoming events right now 🤍</p>
+                ) : (
+                  notifs.map((n) => (
+                    <a
+                      key={n.id}
+                      className="notif-item"
+                      href={n.mapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setNotifOpen(false)}
+                    >
+                      <span className={`notif-ico${n.urgent ? " urgent" : ""}`}>{ICONS.pin}</span>
+                      <span className="notif-text">
+                        <span className="notif-title">{n.title}</span>
+                        <span className="notif-sub">{n.sub}</span>
+                      </span>
+                    </a>
+                  ))
+                )}
+              </div>
+            </>
+          )}
+        </div>
+
+        <button
+          type="button"
+          className="icon-btn theme"
+          onClick={toggleTheme}
+          aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
+        >
+          {dark ? ICONS.sun : ICONS.moon}
+        </button>
+      </div>
 
       <div className="split">
         {/* LEFT — who & when */}
@@ -435,6 +708,24 @@ export default function WeddingPage() {
           </BlurFade>
           <BlurFade delay={0.7} inView>
             <p className="year">2026</p>
+          </BlurFade>
+          <BlurFade delay={0.85} inView>
+            <div className="count-wrap">
+              <p className="count-cap">until we say "I do"</p>
+              <div className="count">
+                {[
+                  { v: cd.d, l: "Days" },
+                  { v: cd.h, l: "Hours" },
+                  { v: cd.m, l: "Minutes" },
+                  { v: cd.s, l: "Seconds" },
+                ].map((c) => (
+                  <div className="count-cell" key={c.l}>
+                    <span className="count-num">{String(c.v).padStart(2, "0")}</span>
+                    <span className="count-lab">{c.l}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </BlurFade>
         </div>
 
