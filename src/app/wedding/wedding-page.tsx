@@ -7,16 +7,17 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { AuroraBackground } from "@/components/ui/aurora-background";
+import { Crackers } from "@/components/ui/crackers";
 
 const EVENTS = [
   {
     icon: "ring",
     name: "Engagement",
-    when: "11 June · 6:00 PM",
+    when: "11 July · 6:00 PM",
     venue: "Gurusamy Kovil Thirumana Mahal, Keezhapavur",
     mapsUrl: "https://maps.app.goo.gl/oXoqtKZHTcfq8GfN6",
-    start: "2026-07-11T18:00:00+05:30",
-    end: "2026-07-11T21:00:00+05:30",
+    start: "2026-07-11T16:00:00+05:30",
+    end: "2026-07-11T19:00:00+05:30",
   },
   {
     icon: "church",
@@ -46,6 +47,13 @@ const EVENTS = [
     end: "2026-07-12T21:00:00+05:30",
   },
 ];
+
+// IST calendar day (YYYY-MM-DD) for a timestamp.
+const istDayStr = (ts: number) =>
+  new Date(ts).toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
+
+// Days the crackers should burst — the IST dates of the events (11 & 12 July 2026).
+const CELEBRATION_DAYS = new Set(EVENTS.map((e) => istDayStr(Date.parse(e.start))));
 
 interface Notif { id: string; title: string; sub: string; urgent: boolean; mapsUrl: string }
 
@@ -90,16 +98,24 @@ function buildNotifs(now: number): Notif[] {
     }
 
     const ms = start - now;
-    if (ms <= 3 * HOUR) {
-      const h = Math.floor(ms / HOUR);
-      const m = Math.floor((ms / 60_000) % 60);
-      const inStr = h > 0 ? `${h}h ${m}m` : `${m}m`;
-      out.push({ id: e.name, title: `${e.name} is about to begin`, sub: `Starts in ${inStr} · tap for directions`, urgent: true, mapsUrl: e.mapsUrl });
-      continue;
-    }
 
+    // Same calendar day (IST): show the live time remaining until it starts.
     if (istDay(now) === istDay(start)) {
-      out.push({ id: e.name, title: `${e.name} is today`, sub: `${e.when} · tap for directions`, urgent: false, mapsUrl: e.mapsUrl });
+      let inStr: string;
+      if (ms < HOUR) {
+        inStr = "about an hour";
+      } else {
+        const hr = Math.round(ms / HOUR);
+        inStr = `${hr} hour${hr !== 1 ? "s" : ""}`;
+      }
+      const urgent = ms <= 3 * HOUR;
+      out.push({
+        id: e.name,
+        title: urgent ? `${e.name} is about to begin` : `${e.name} is today`,
+        sub: `Starts in ${inStr} · tap for directions`,
+        urgent,
+        mapsUrl: e.mapsUrl,
+      });
     } else {
       const today = istMidnight(now);
       const eventDay = istMidnight(start);
@@ -243,6 +259,10 @@ html.wd-dark, html.wd-dark body { background-color: #060608 !important; color-sc
 }
 /* Aurora sits behind everything */
 .aurora-bg { position: fixed; inset: 0; z-index: -1; }
+/* guarantee the aurora goes dark with the wedding theme (inline = never stale-cached) */
+html.wd-dark .aurora-bg { background-color: #060608 !important; }
+html.wd-dark .aurora-bg > div > div { opacity: 0.12 !important; filter: none !important; }
+.crackers-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 70; }
 html.wd-dark .page {
   --bg: #060608;
   --ink: #f2efe9;
@@ -558,8 +578,8 @@ html.wd-dark::view-transition-old(root) {
 }
 @keyframes wd-reveal {
   0% { mask-size: 0; }
-  12% { mask-size: 42vmax; }
-  90% { mask-size: 42vmax; }
+  12% { mask-size: 20vmax; }
+  90% { mask-size: 20vmax; }
   100% { mask-size: 2200vmax; }
 }
 
@@ -595,23 +615,19 @@ export default function WeddingPage() {
 
   const notifs = now ? buildNotifs(now) : [];
   const hasUrgent = notifs.some((n) => n.urgent);
+  const isCelebrationDay = now > 0 && CELEBRATION_DAYS.has(istDayStr(now));
 
   useEffect(() => {
-    const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
-    const hour = new Date().getHours();
-    const isNight = hour >= 18 || hour < 6;
-    const initialDark = prefersDark || isNight;
-
-    document.documentElement.classList.toggle("wd-dark", initialDark);
-    document.documentElement.classList.toggle("dark", initialDark);
-    setDark(initialDark);
+    // Always load in the light theme; dark is opt-in via the toggle for this session.
+    // Only the wedding-scoped `wd-dark` is managed here — the site-wide `dark` is left untouched.
+    document.documentElement.classList.remove("wd-dark");
+    setDark(false);
   }, []);
 
   const toggleTheme = () => {
     const next = !document.documentElement.classList.contains("wd-dark");
     const apply = () => {
       document.documentElement.classList.toggle("wd-dark", next);
-      document.documentElement.classList.toggle("dark", next); // drives the aurora's dark variant
     };
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -630,6 +646,7 @@ export default function WeddingPage() {
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
       <AuroraBackground className="aurora-bg h-full w-full" />
+      {isCelebrationDay && <Crackers duration={30000} cadence={380} />}
 
       <div className="top-actions">
         <div className="notif-wrap">

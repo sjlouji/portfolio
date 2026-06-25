@@ -36,6 +36,9 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
+// Always start the wedding route in the light theme (before paint, no dark flash).
+const themeInit = `(function(){try{document.documentElement.classList.remove('wd-dark');}catch(e){}})();`;
+
 export default function WeddingLayout({
   children,
 }: {
@@ -43,6 +46,7 @@ export default function WeddingLayout({
 }) {
   return (
     <div className={`${cinzel.variable} ${playfair.variable} ${pinyon.variable} ${montserrat.variable} ${caveat.variable}`}>
+      <script dangerouslySetInnerHTML={{ __html: themeInit }} />
       {children}
     </div>
   );

@@ -126,5 +126,11 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("tailwindcss/plugin")(function ({ addVariant }: { addVariant: (name: string, def: string) => void }) {
+      // wedding route's own dark scope, independent of the site-wide `.dark`
+      addVariant("wd-dark", ".wd-dark &");
+    }),
+  ],
 } satisfies Config;
