@@ -15,8 +15,8 @@ const EVENTS = [
     when: "11 June · 6:00 PM",
     venue: "Gurusamy Kovil Thirumana Mahal, Keezhapavur",
     mapsUrl: "https://maps.app.goo.gl/oXoqtKZHTcfq8GfN6",
-    start: "2026-06-11T18:00:00+05:30",
-    end: "2026-06-11T21:00:00+05:30",
+    start: "2026-07-11T18:00:00+05:30",
+    end: "2026-07-11T21:00:00+05:30",
   },
   {
     icon: "church",
@@ -55,11 +55,34 @@ function buildNotifs(now: number): Notif[] {
   const istDay = (ts: number) =>
     new Date(ts).toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
   const out: Notif[] = [];
+  const completed: Notif[] = [];
+
+  const istMidnight = (ts: number) => {
+    const [year, month, day] = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
+      .format(ts)
+      .split("-");
+
+    return Date.parse(`${year}-${month}-${day}T00:00:00+05:30`);
+  };
 
   for (const e of EVENTS) {
     const start = Date.parse(e.start);
     const end = Date.parse(e.end);
-    if (now > end) continue; // event finished — skip
+    if (now > end) {
+      completed.push({
+        id: `${e.name}-completed`,
+        title: `${e.name} has concluded`,
+        sub: `${e.when} · a beautiful moment in our story`,
+        urgent: false,
+        mapsUrl: e.mapsUrl,
+      });
+      continue;
+    }
 
     if (now >= start) {
       out.push({ id: e.name, title: `${e.name} is happening now`, sub: "Tap for directions", urgent: true, mapsUrl: e.mapsUrl });
@@ -78,11 +101,13 @@ function buildNotifs(now: number): Notif[] {
     if (istDay(now) === istDay(start)) {
       out.push({ id: e.name, title: `${e.name} is today`, sub: `${e.when} · tap for directions`, urgent: false, mapsUrl: e.mapsUrl });
     } else {
-      const days = Math.ceil(ms / 86_400_000);
+      const today = istMidnight(now);
+      const eventDay = istMidnight(start);
+      const days = Math.round((eventDay - today) / 86_400_000);
       out.push({ id: e.name, title: `${e.name} in ${days} day${days > 1 ? "s" : ""}`, sub: `${e.when} · tap for directions`, urgent: false, mapsUrl: e.mapsUrl });
     }
   }
-  return out;
+  return [...out, ...completed];
 }
 
 const svg = {
@@ -156,6 +181,11 @@ const ICONS: Record<string, React.ReactNode> = {
     <svg viewBox="0 0 24 24" {...svg}>
       <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
       <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+    </svg>
+  ),
+  arrowRight: (
+    <svg viewBox="0 0 24 24" {...svg} strokeWidth={2}>
+      <path d="M8 5l8 7-8 7" />
     </svg>
   ),
 };
@@ -337,7 +367,7 @@ html.wd-dark .page {
 .notif-item {
   display: flex;
   gap: 11px;
-  align-items: flex-start;
+  align-items: center;
   text-decoration: none;
   color: var(--ink);
   padding: 11px 12px;
@@ -348,7 +378,10 @@ html.wd-dark .page {
 .notif-ico { flex-shrink: 0; margin-top: 1px; color: var(--muted); }
 .notif-ico.urgent { color: var(--rose); }
 .notif-ico svg { width: 16px; height: 16px; }
-.notif-text { display: flex; flex-direction: column; gap: 3px; }
+.notif-text { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.notif-arrow { display: inline-flex; flex-shrink: 0; align-items: center; color: var(--muted); }
+.notif-arrow svg { width: 16px; height: 16px; }
+.notif-item:hover .notif-arrow { color: var(--ink); }
 .notif-title {
   font-family: var(--font-montserrat), sans-serif;
   font-size: 0.74rem;
